@@ -317,8 +317,58 @@ function webni_maybe_upgrade() {
 	update_option( 'webni_version', WEBNI_THEME_VERSION );
 	webni_apply_serbian_urls();
 	update_option( 'webni_flush_rewrite', 1 ); // Consumed by webni_maybe_flush_rewrite() on init 99.
+	if ( ! get_option( 'webni_widgets_cleaned' ) ) {
+		webni_clear_stock_widgets();
+		update_option( 'webni_widgets_cleaned', 1 );
+	}
 }
 add_action( 'init', 'webni_maybe_upgrade', 98 );
+
+/**
+ * WordPress drops its sample widgets (search, recent posts/comments, archives, categories) into the
+ * first registered widget area on install and on theme switch. They are English and empty on a shop,
+ * so they are moved to the inactive list; anything else the shop placed in "Futer — dodatno" stays.
+ */
+function webni_clear_stock_widgets() {
+	$sidebars = wp_get_sidebars_widgets();
+	if ( empty( $sidebars['footer-extra'] ) || ! is_array( $sidebars['footer-extra'] ) ) {
+		return;
+	}
+	$stock = array();
+	$keep  = array();
+	foreach ( $sidebars['footer-extra'] as $widget_id ) {
+		if ( webni_is_stock_widget( $widget_id ) ) {
+			$stock[] = $widget_id;
+		} else {
+			$keep[] = $widget_id;
+		}
+	}
+	if ( ! $stock ) {
+		return;
+	}
+	$sidebars['footer-extra']        = $keep;
+	$inactive                        = isset( $sidebars['wp_inactive_widgets'] ) && is_array( $sidebars['wp_inactive_widgets'] ) ? $sidebars['wp_inactive_widgets'] : array();
+	$sidebars['wp_inactive_widgets'] = array_values( array_unique( array_merge( $inactive, $stock ) ) );
+	wp_set_sidebars_widgets( $sidebars );
+}
+
+/**
+ * Whether a widget is one of WordPress' sample widgets (classic or block form).
+ *
+ * @param string $widget_id Widget ID (e.g. "block-5", "archives-2").
+ * @return bool
+ */
+function webni_is_stock_widget( $widget_id ) {
+	if ( preg_match( '/^(search|recent-posts|recent-comments|archives|categories|meta|calendar)-\d+$/', $widget_id ) ) {
+		return true;
+	}
+	if ( preg_match( '/^block-(\d+)$/', $widget_id, $m ) ) {
+		$blocks  = get_option( 'widget_block', array() );
+		$content = isset( $blocks[ (int) $m[1] ]['content'] ) ? (string) $blocks[ (int) $m[1] ]['content'] : '';
+		return (bool) preg_match( '/<!-- wp:(search|latest-posts|latest-comments|archives|categories|calendar)[ \/]/', $content );
+	}
+	return false;
+}
 
 /**
  * Runs when the theme is activated.
@@ -328,6 +378,8 @@ function webni_activate() {
 	webni_store_defaults();
 	webni_apply_serbian_urls();
 	webni_create_menus();
+	webni_clear_stock_widgets();
+	update_option( 'webni_widgets_cleaned', 1 );
 	update_option( 'webni_flush_rewrite', 1 );
 	webni_maybe_flush_rewrite(); // Writes .htaccess now, while we are in the admin context.
 	update_option( 'webni_version', WEBNI_THEME_VERSION );

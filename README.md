@@ -113,6 +113,7 @@ Theme strings use the `webni-custom-version-1` domain (`languages/webni-custom-v
 
 ## 10. Before launch
 
+- Settings → General: site title *BP|DL Parfum*, tagline, a real administration e-mail (hosting panels install with a placeholder like `info@<domain>`), and WooCommerce → Settings → Emails → "From" address; Appearance → Customize → Site Identity → site icon.
 - Legal pages are drafts with `[placeholders]` for the company data — have them reviewed.
 - Set the contact data and social links in the Customizer, upload a logo if needed.
 - Create the Gravity Forms and enter their IDs.
@@ -121,7 +122,7 @@ Theme strings use the `webni-custom-version-1` domain (`languages/webni-custom-v
 
 ## Changelog
 
-**1.1.3** — Pretty-URL check is less strict: any rewrite to `index.php` in `.htaccess` counts (no WordPress markers required) and, when the file has none, the theme asks the server itself with one HEAD request to `/wp-json/` before switching to plain URLs; the admin notice names the expected file path.
+**1.1.3** — WordPress' sample widgets (Archives, Categories…) are moved out of the *Futer — dodatno* area on activation/update. Pretty-URL check is less strict: any rewrite to `index.php` in `.htaccess` counts (no WordPress markers required) and, when the file has none, the theme asks the server itself with one HEAD request to `/wp-json/` before switching to plain URLs; the admin notice names the expected file path.
 
 **1.1.2** — The cycling character hero is the default again. The mist no longer follows the pointer (home and product pages) and drifts slowly on its own; its strength is a Customizer setting (*Jačina magle*, default 50 %, lower = more transparent). The bottle no longer bobs up and down.
 
