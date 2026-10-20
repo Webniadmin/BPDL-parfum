@@ -205,7 +205,32 @@ function webni_htaccess_has_rules() {
 		return false;
 	}
 	$contents = (string) file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local file.
-	return false !== strpos( $contents, '# BEGIN WordPress' ) && false !== strpos( $contents, 'RewriteRule' );
+	// Any rewrite to index.php counts, with or without the "# BEGIN WordPress" markers (hosting panels often add their own block).
+	return false !== stripos( $contents, 'RewriteRule' ) && false !== stripos( $contents, 'index.php' );
+}
+
+/**
+ * Ask the server itself whether pretty URLs are served: one HEAD request to /wp-json/.
+ * Rewrites may live in the virtual host instead of .htaccess, so the file alone is not proof.
+ *
+ * @return bool|null True/false when the server answered, null when the loopback request failed.
+ */
+function webni_rewrite_probe() {
+	$response = wp_remote_head( home_url( '/wp-json/' ), array(
+		'timeout'     => 5,
+		'redirection' => 0,
+		'sslverify'   => false,
+		'cookies'     => array(),
+		'headers'     => array( 'X-Webni-Probe' => '1' ),
+	) );
+	if ( is_wp_error( $response ) ) {
+		return null;
+	}
+	$code = (int) wp_remote_retrieve_response_code( $response );
+	if ( 404 === $code || 0 === $code ) {
+		return false; // Apache answered for a path that does not exist on disk: no rewrite.
+	}
+	return true; // 200, a redirect or an auth response: the request reached WordPress.
 }
 
 /**
@@ -223,7 +248,11 @@ function webni_pretty_permalinks_ready() {
 		return function_exists( 'iis7_supports_permalinks' ) ? iis7_supports_permalinks() : true;
 	}
 	if ( $is_apache ) {
-		return webni_htaccess_has_rules();
+		if ( webni_htaccess_has_rules() ) {
+			return true;
+		}
+		$probe = webni_rewrite_probe();
+		return null === $probe ? false : $probe;
 	}
 	return true; // Unknown server (CLI, dev server): nothing to verify.
 }
@@ -261,6 +290,13 @@ function webni_permalink_notice() {
 	<div class="notice notice-warning">
 		<p><strong>BP|DL Parfum:</strong> <?php esc_html_e( 'Serbian URLs (/parfemi/, /parfem/…) are switched off because WordPress could not write its rewrite block to .htaccess. The site works with plain URLs in the meantime.', 'webni-custom-version-1' ); ?></p>
 		<p><?php esc_html_e( 'Fix: make .htaccess in the site root writable (or paste the block below into it), then open Settings → Permalinks, choose "Post name" and save — or use WooCommerce → BP|DL alati → Apply Serbian URLs.', 'webni-custom-version-1' ); ?></p>
+		<p><?php
+		if ( ! function_exists( 'get_home_path' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+		}
+		/* translators: %s file path */
+		echo esc_html( sprintf( __( 'Expected file: %s', 'webni-custom-version-1' ), get_home_path() . '.htaccess' ) );
+		?></p>
 		<pre style="background:#f6f7f7;padding:10px;overflow:auto;font-size:12px"><?php echo esc_html( webni_htaccess_block() ); ?></pre>
 	</div>
 	<?php

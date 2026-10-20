@@ -3,7 +3,7 @@
 Custom WordPress + WooCommerce theme for **BP|DL Parfum** — eight AI-written perfume recipes, one dark "character" world, Serbian (Latin) storefront.
 
 - Theme slug / text domain: `webni-custom-version-1`
-- Version: 1.1.2
+- Version: 1.1.3
 - Requires: WordPress 6.4+, PHP 8.1+, WooCommerce 8.0+ (tested with 10.1)
 - Forms: Gravity Forms (optional at install time, required for newsletter / quiz e-mail / contact)
 - No page builders, no CDN fonts, no third-party requests from the theme.
@@ -120,6 +120,8 @@ Theme strings use the `webni-custom-version-1` domain (`languages/webni-custom-v
 - Card payments: install and configure the bank's plugin; no theme change is needed.
 
 ## Changelog
+
+**1.1.3** — Pretty-URL check is less strict: any rewrite to `index.php` in `.htaccess` counts (no WordPress markers required) and, when the file has none, the theme asks the server itself with one HEAD request to `/wp-json/` before switching to plain URLs; the admin notice names the expected file path.
 
 **1.1.2** — The cycling character hero is the default again. The mist no longer follows the pointer (home and product pages) and drifts slowly on its own; its strength is a Customizer setting (*Jačina magle*, default 50 %, lower = more transparent). The bottle no longer bobs up and down.
 
