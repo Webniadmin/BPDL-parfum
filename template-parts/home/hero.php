@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 
 $perfumes = isset( $args['perfumes'] ) ? $args['perfumes'] : array();
 $first    = $perfumes ? webni_perfume( $perfumes[0] ) : null;
-$style    = $first ? webni_palette_style( $first ) : '';
+$style    = ( $first ? webni_palette_style( $first ) . ';' : '' ) . '--mist:' . webni_mist_intensity();
 $mode     = webni_hero_mode();
 $title_1  = webni_option( 'hero_title_1' );
 $title_2  = webni_option( 'hero_title_2' );
@@ -90,7 +90,7 @@ $webni_words = function ( $text, $delay ) {
 		</div>
 		<?php if ( 'image' === $mode && 'split' === $layout && $image['cutout'] ) : ?>
 			<div class="hero__stage hero__stage--cutout">
-				<?php echo wp_get_attachment_image( $image['id'], 'webni-hero', false, array( 'class' => 'pack pack--hero pack--float', 'loading' => 'eager', 'fetchpriority' => 'high', 'decoding' => 'async' ) ); ?>
+				<?php echo wp_get_attachment_image( $image['id'], 'webni-hero', false, array( 'class' => 'pack pack--hero', 'loading' => 'eager', 'fetchpriority' => 'high', 'decoding' => 'async' ) ); ?>
 			</div>
 		<?php elseif ( 'image' === $mode && 'split' === $layout ) : ?>
 			<div class="hero__stage hero__stage--image">

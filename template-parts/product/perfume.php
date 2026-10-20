@@ -19,7 +19,7 @@ $n        = str_pad( (string) ( $d['n'] ? $d['n'] : 1 ), 2, '0', STR_PAD_LEFT );
 $of       = str_pad( (string) max( $count, 1 ), 2, '0', STR_PAD_LEFT );
 $notes    = $d['notes'];
 ?>
-<section class="hero hero--single<?php echo $light ? ' is-light' : ''; ?>" id="hero" style="<?php echo esc_attr( webni_palette_style( $d ) ); ?>" data-c1="<?php echo esc_attr( $d['palette']['c1'] ); ?>" data-c2="<?php echo esc_attr( $d['palette']['c2'] ); ?>" data-c3="<?php echo esc_attr( $d['palette']['c3'] ); ?>">
+<section class="hero hero--single<?php echo $light ? ' is-light' : ''; ?>" id="hero" style="<?php echo esc_attr( webni_palette_style( $d ) . ';--mist:' . webni_mist_intensity() ); ?>" data-c1="<?php echo esc_attr( $d['palette']['c1'] ); ?>" data-c2="<?php echo esc_attr( $d['palette']['c2'] ); ?>" data-c3="<?php echo esc_attr( $d['palette']['c3'] ); ?>">
 	<canvas class="mist" aria-hidden="true"></canvas><div class="hero__grain"></div>
 	<?php woocommerce_breadcrumb(); ?>
 	<div class="hero__inner container">
@@ -53,7 +53,7 @@ $notes    = $d['notes'];
 			<?php do_action( 'woocommerce_single_product_summary' ); ?>
 		</div>
 		<div class="hero__stage">
-			<?php echo webni_perfume_image( $d, 'hero', array( 'class' => 'pack pack--hero pack--float', 'loading' => 'eager', 'fetchpriority' => 'high', 'decoding' => 'async' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php echo webni_perfume_image( $d, 'hero', array( 'class' => 'pack pack--hero', 'loading' => 'eager', 'fetchpriority' => 'high', 'decoding' => 'async' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</div>
 	</div>
 	<?php if ( $adjacent['next'] ) : ?>

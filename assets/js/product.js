@@ -1,4 +1,4 @@
-/* Single perfume page: mist in the product palette + pointer interaction. */
+/* Single perfume page: mist in the product palette (drifts on its own, no pointer interaction). */
 (function () {
   'use strict';
   var hero = document.getElementById('hero');
@@ -10,6 +10,5 @@
     c3: hero.dataset.c3 || '#d4af37',
     light: hero.classList.contains('is-light')
   };
-  var mist = canvas && window.WebniMist ? window.WebniMist(canvas, palette) : null;
-  if (window.WebniHeroPointer) { window.WebniHeroPointer(hero, mist); }
+  if (canvas && window.WebniMist) { window.WebniMist(canvas, palette, window.BPDL && window.BPDL.mist ? window.BPDL.mist : 0.5); }
 })();

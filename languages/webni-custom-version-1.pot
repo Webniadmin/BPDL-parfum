@@ -2,14 +2,14 @@
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Webni Custom Version 1 Theme 1.1.1\n"
+"Project-Id-Version: Webni Custom Version 1 Theme 1.1.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/bpdl-parfum\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-20T14:42:19+00:00\n"
+"POT-Creation-Date: 2026-10-20T14:49:49+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: webni-custom-version-1\n"
@@ -257,20 +257,20 @@ msgstr ""
 msgid "You are not allowed to do this."
 msgstr ""
 
-#: inc/enqueue.php:97
+#: inc/enqueue.php:98
 msgid "%s je u korpi."
 msgstr ""
 
-#: inc/enqueue.php:98
+#: inc/enqueue.php:99
 #: inc/woocommerce.php:87
 msgid "Vidi korpu"
 msgstr ""
 
-#: inc/enqueue.php:99
+#: inc/enqueue.php:100
 msgid "Kopirano. Nalepi u story ili poruku."
 msgstr ""
 
-#: inc/enqueue.php:100
+#: inc/enqueue.php:101
 #: inc/woocommerce.php:165
 #: template-parts/home/collection.php:25
 msgid "Nema parfema za ovaj izbor."
@@ -631,21 +631,21 @@ msgstr ""
 msgid "Unisex"
 msgstr ""
 
-#: inc/template-tags.php:515
+#: inc/template-tags.php:526
 #: inc/woocommerce.php:193
 #: template-parts/home/pair.php:41
 msgid "Akcija"
 msgstr ""
 
-#: inc/template-tags.php:516
+#: inc/template-tags.php:527
 msgid "Rasprodato"
 msgstr ""
 
-#: inc/template-tags.php:724
+#: inc/template-tags.php:735
 msgid "Čeka odobrenje"
 msgstr ""
 
-#: inc/template-tags.php:727
+#: inc/template-tags.php:738
 msgid "Odgovori"
 msgstr ""
 

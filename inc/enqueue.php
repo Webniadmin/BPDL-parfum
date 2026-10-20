@@ -83,6 +83,7 @@ function webni_js_data() {
 
 	return array(
 		'perfumes' => $perfumes,
+		'mist'     => webni_mist_intensity(),
 		'zodiac'   => webni_zodiac_table(),
 		'quiz'     => webni_quiz_config(),
 		'gift'     => webni_gift_config(),

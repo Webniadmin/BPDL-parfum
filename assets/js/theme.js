@@ -28,7 +28,7 @@
     var src = p.images && p.images[kind];
     if (!src) { return ''; }
     var photo = p.cutout && p.cutout[kind] === false; // rectangular photo: framed, not floating
-    return '<img class="pack pack--' + kind + (opts.float && !photo ? ' pack--float' : '') + (photo ? ' pack--photo' : '') + '" src="' + esc(src) + '" alt="' + esc(p.name) + '" loading="' + (opts.eager ? 'eager' : 'lazy') + '" decoding="async">';
+    return '<img class="pack pack--' + kind + (photo ? ' pack--photo' : '') + '" src="' + esc(src) + '" alt="' + esc(p.name) + '" loading="' + (opts.eager ? 'eager' : 'lazy') + '" decoding="async">';
   }
   window.BPDL_util = { esc: esc, sprintf: sprintf, packHTML: packHTML, byKey: byKey };
 

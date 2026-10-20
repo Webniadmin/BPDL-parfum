@@ -379,12 +379,23 @@ function webni_discovery_url() {
 }
 
 /**
- * Home hero mode: 'image' (one large static picture) or 'animated' (WebGL mist cycling the characters).
+ * Home hero mode: 'animated' (WebGL mist, the eight characters cycle) or 'image' (one large static picture).
  *
  * @return string
  */
 function webni_hero_mode() {
-	return 'animated' === webni_option( 'hero_mode', 'image' ) ? 'animated' : 'image';
+	return 'image' === webni_option( 'hero_mode', 'animated' ) ? 'image' : 'animated';
+}
+
+/**
+ * Mist opacity 0–1 (Customizer "Jačina magle", %), shared by the home and product heroes.
+ *
+ * @return float
+ */
+function webni_mist_intensity() {
+	$v = webni_option( 'hero_mist', 50 );
+	$v = is_numeric( $v ) ? (float) $v : 50.0;
+	return round( max( 0, min( 100, $v ) ) / 100, 2 );
 }
 
 /**

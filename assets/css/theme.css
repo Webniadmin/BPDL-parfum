@@ -202,7 +202,7 @@ body.admin-bar .nav { top: 32px; }
    -------------------------------------------------------------------------- */
 .hero { position: relative; color: var(--hero-fg); transition: color .8s; }
 .mist { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; opacity: 0; transition: opacity 1.6s ease; }
-.mist.is-ready { opacity: 1; }
+.mist.is-ready { opacity: var(--mist, .5); }
 .hero__grain { position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: .32; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 .hero .eyebrow { color: var(--hero-fg-2); }
@@ -233,9 +233,7 @@ body.admin-bar .nav { top: 32px; }
 .strip__item:hover { color: var(--hero-fg); }
 .hero__stage { display: grid; place-items: center; min-width: 0; }
 .pack { display: block; height: auto; max-width: 100%; filter: drop-shadow(0 22px 26px rgba(0, 0, 0, .45)); }
-.pack--float { animation: packFloat 6s ease-in-out infinite; }
-@keyframes packFloat { 0%, 100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-14px) rotate(1.5deg); } }
-.pack-stage { position: relative; display: grid; place-items: center; transition: transform .6s var(--ease); animation: packFloat 6s ease-in-out infinite; }
+.pack-stage { position: relative; display: grid; place-items: center; }
 .pack-stage .pack { grid-area: 1 / 1; opacity: 0; transition: opacity .9s var(--ease); height: min(64svh, 620px); width: auto; max-width: 40vw; }
 .pack-stage .pack.is-on { opacity: 1; }
 .hero__stage .pack--hero { height: min(66svh, 640px); width: auto; max-width: 40vw; }
@@ -706,7 +704,7 @@ label { font-size: 13px; letter-spacing: .08em; color: var(--fg-2); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .hero__title .word { animation: none; transform: none; opacity: 1; }
-  .pack--float, .pack-stage, .marquee__track, .section--quiz .orb, .world::before { animation: none; }
+  .marquee__track, .section--quiz .orb, .world::before { animation: none; }
   .js .reveal { opacity: 1; transform: none; transition: none; }
   .strip__item.is-active .strip__bar { animation: none; transform: none; }
   .card, .pair-card, .post-card, .btn { transition: none; }

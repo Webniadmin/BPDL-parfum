@@ -1,6 +1,8 @@
 /* WebGL mist in the colours of the active character (hero backgrounds).
-   Exposes window.WebniMist(canvas, palette) → { setPalette, pointer, start, stop, gust }.
-   Renders at reduced resolution, only while visible, and stops on prefers-reduced-motion. */
+   Exposes window.WebniMist(canvas, palette, intensity) → { setPalette, start, stop, gust }.
+   Drifts slowly on its own (no pointer interaction), renders at reduced resolution, only while
+   visible, and stops on prefers-reduced-motion. `intensity` 0–1 (Customizer "Jačina magle")
+   scales the highlights; the canvas opacity is set from the same value in CSS. */
 (function () {
   'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -11,30 +13,27 @@
     return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
   }
 
-  window.WebniMist = function (canvas, palette) {
+  window.WebniMist = function (canvas, palette, intensity) {
+    var I = Math.max(0, Math.min(1, intensity == null ? 0.5 : +intensity));
     var gl = canvas.getContext('webgl', { antialias: false, alpha: false, depth: false, powerPreference: 'high-performance' });
     if (!gl) { return null; }
     var vs = 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
-    var fs = 'precision highp float;uniform vec2 u_res;uniform float u_t;uniform vec2 u_m;uniform float u_f;uniform vec3 u_c1,u_c2,u_c3;uniform float u_l;' +
+    var fs = 'precision highp float;uniform vec2 u_res;uniform float u_t;uniform float u_i;uniform vec3 u_c1,u_c2,u_c3;uniform float u_l;' +
       'float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}' +
       'float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),u.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),u.x),u.y);}' +
       'float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<4;i++){v+=a*noise(p);p=m*p;a*=.5;}return v;}' +
       'void main(){' +
       ' float mn=min(u_res.x,u_res.y);' +
       ' vec2 uv=(gl_FragCoord.xy-.5*u_res)/mn;' +
-      ' vec2 m=(u_m-.5)*u_res/mn;' +
-      ' float d=length(uv-m);' +
-      ' vec2 push=(uv-m)/(d+1e-3)*u_f*exp(-d*d*5.);' +
-      ' vec2 p=uv*1.45+push+vec2(0.,u_t*.025);' +
+      ' vec2 p=uv*1.45+vec2(0.,u_t*.025);' +
       ' float t=u_t*.11;' +
       ' vec2 q=vec2(fbm(p+vec2(0.,t)),fbm(p+vec2(5.2,1.3)-t*.7));' +
       ' vec2 r=vec2(fbm(p+4.*q+vec2(1.7,9.2)+t*.4),fbm(p+4.*q+vec2(8.3,2.8)-t*.3));' +
       ' float f=fbm(p+3.5*r);' +
-      ' float g=clamp(f*f*3.2,0.,1.);' +
+      ' float g=clamp(f*f*3.2,0.,1.)*mix(.6,1.,u_i);' +
       ' vec3 col=mix(u_c1,u_c2,g);' +
-      ' col=mix(col,u_c3,clamp(length(r)-.4,0.,1.)*.6);' +
-      ' col+=u_c3*pow(clamp(f,0.,1.),5.)*.38;' +
-      ' col+=u_c3*exp(-d*d*9.)*.1*(1.+u_f*2.5);' +
+      ' col=mix(col,u_c3,clamp(length(r)-.4,0.,1.)*.6*u_i);' +
+      ' col+=u_c3*pow(clamp(f,0.,1.),5.)*.38*u_i;' +
       ' float vig=smoothstep(1.5,.35,length(uv));' +
       ' col*=mix(mix(.68,.9,u_l),1.,vig);' +
       ' col+=(hash(gl_FragCoord.xy+fract(u_t))-.5)*.05;' +
@@ -54,13 +53,12 @@
     gl.enableVertexAttribArray(a);
     gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
     var U = {};
-    ['u_res', 'u_t', 'u_m', 'u_f', 'u_c1', 'u_c2', 'u_c3', 'u_l'].forEach(function (n) { U[n] = gl.getUniformLocation(pr, n); });
+    ['u_res', 'u_t', 'u_i', 'u_c1', 'u_c2', 'u_c3', 'u_l'].forEach(function (n) { U[n] = gl.getUniformLocation(pr, n); });
 
     var cur = [hex(palette.c1), hex(palette.c2), hex(palette.c3)];
     var tgt = cur.map(function (c) { return c.slice(); });
     var light = palette.light ? 1 : 0, lightT = light;
-    var t = 0, last = performance.now(), gust = 0, force = 0, running = false;
-    var m = [0.5, 0.5], mt = [0.5, 0.5];
+    var t = 0, last = performance.now(), gust = 0, running = false;
     var scale = fine ? 0.5 : 0.38;
 
     function resize() {
@@ -72,16 +70,13 @@
       if (!running) { return; }
       var dt = Math.min(0.05, (now - last) / 1000); last = now;
       resize();
-      var speed = reduce ? 0 : 1 + gust * 3;
+      var speed = reduce ? 0 : 1 + gust * 2;
       t += dt * speed; gust *= 0.96;
       for (var i = 0; i < 3; i++) { for (var k = 0; k < 3; k++) { cur[i][k] += (tgt[i][k] - cur[i][k]) * 0.04; } }
       light += (lightT - light) * 0.04;
-      m[0] += (mt[0] - m[0]) * 0.07; m[1] += (mt[1] - m[1]) * 0.07;
-      force *= 0.93;
       gl.uniform2f(U.u_res, canvas.width, canvas.height);
       gl.uniform1f(U.u_t, t);
-      gl.uniform2f(U.u_m, m[0], m[1]);
-      gl.uniform1f(U.u_f, Math.min(1.2, force + gust * 0.8));
+      gl.uniform1f(U.u_i, I);
       gl.uniform3fv(U.u_c1, cur[0]); gl.uniform3fv(U.u_c2, cur[1]); gl.uniform3fv(U.u_c3, cur[2]);
       gl.uniform1f(U.u_l, light);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
@@ -96,7 +91,6 @@
         if (now) { for (var j = 0; j < 3; j++) { cur[j] = n[j].slice(); } light = lightT; }
         gust = 1;
       },
-      pointer: function (x, y, v) { mt[0] = x; mt[1] = 1 - y; force = Math.min(1.2, force + v); },
       start: function () { if (running) { return; } running = true; last = performance.now(); requestAnimationFrame(frame); },
       stop: function () { running = false; },
       gust: function () { gust = Math.max(gust, 0.9); }
@@ -110,19 +104,5 @@
     api.start();
     requestAnimationFrame(function () { canvas.classList.add('is-ready'); });
     return api;
-  };
-
-  /* Pointer → mist push (shared by home and product heroes). */
-  window.WebniHeroPointer = function (hero, mist) {
-    if (!fine) { return; }
-    var lx = null, ly = null;
-    hero.addEventListener('pointermove', function (e) {
-      var r = hero.getBoundingClientRect();
-      var x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
-      var v = lx == null ? 0 : Math.hypot(x - lx, y - ly) * 9;
-      lx = x; ly = y;
-      if (mist) { mist.pointer(x, y, v); }
-    });
-    hero.addEventListener('pointerleave', function () { lx = null; });
   };
 })();

@@ -17,7 +17,8 @@ defined( 'ABSPATH' ) || exit;
 function webni_option_defaults() {
 	return array(
 		// Hero.
-		'hero_mode'         => 'image',   // image | animated
+		'hero_mode'         => 'animated', // animated (characters cycle over the mist) | image
+		'hero_mist'         => 50,         // mist opacity in %, home + product heroes
 		'hero_image'        => 0,         // attachment ID; falls back to the first perfume's image
 		'hero_image_mobile' => 0,         // optional portrait attachment for phones (cover layout)
 		'hero_layout'       => 'cover',   // cover | split
@@ -165,10 +166,11 @@ function webni_customize_register( $wp_customize ) {
 	$fields = array(
 		array( 'hero_mode', 'hero', 'Prikaz prvog ekrana', 'select', array(
 			'choices' => array(
-				'image'    => 'Velika slika (bez animacije)',
-				'animated' => 'Animacija — osam karaktera sa maglom',
+				'animated' => 'Osam karaktera se smenjuju, magla u pozadini',
+				'image'    => 'Jedna velika slika (bez smenjivanja)',
 			),
 		) ),
+		array( 'hero_mist', 'hero', 'Jačina magle u pozadini (%) — manje = prozirnije; važi i za stranice parfema', 'number' ),
 		array( 'hero_image', 'hero', 'Velika slika', 'image', array(
 			'description' => 'Preporuka: horizontalna fotografija, najmanje 2000 × 1200 px, tamnija sa leve strane gde stoji tekst. Ako slika nije izabrana, koristi se slika prvog parfema pored teksta.',
 		) ),

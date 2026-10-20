@@ -1,6 +1,7 @@
 /* Home hero.
    "image" mode: one static picture; only the character name in "Ti si …" keeps cycling.
-   "animated" mode: cycles through the eight characters (palette, mist colours, name, photo). */
+   "animated" mode (default): cycles through the eight characters every few seconds (palette, mist
+   colours, name, photo); the mist drifts on its own and nothing follows the pointer. */
 (function () {
   'use strict';
   var D = window.BPDL;
@@ -9,7 +10,6 @@
   var hero = document.getElementById('hero');
   if (!hero || !hero.classList.contains('hero--home')) { return; }
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var fine = window.matchMedia('(pointer: fine)').matches;
 
   if (hero.getAttribute('data-mode') === 'image') {
     var el = document.getElementById('cycleName');
@@ -23,7 +23,7 @@
   }
 
   var canvas = hero.querySelector('.mist');
-  var mist = canvas && window.WebniMist ? window.WebniMist(canvas, P[0].palette) : null;
+  var mist = canvas && window.WebniMist ? window.WebniMist(canvas, P[0].palette, D.mist == null ? 0.5 : D.mist) : null;
   var nameEl = document.getElementById('cycleName');
   var strip = Array.prototype.slice.call(hero.querySelectorAll('.strip__item'));
   var stage = document.getElementById('heroPack');
@@ -62,13 +62,4 @@
     b.addEventListener('pointerleave', function () { paused = false; hero.classList.remove('is-paused'); schedule(remaining); });
   });
   set(0, true);
-  if (window.WebniHeroPointer) { window.WebniHeroPointer(hero, mist); }
-  if (fine && !reduce && stage) {
-    hero.addEventListener('pointermove', function (e) {
-      var r = hero.getBoundingClientRect();
-      var x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
-      stage.style.transform = 'rotate(' + ((x - 0.5) * 6).toFixed(2) + 'deg) translate(' + ((x - 0.5) * 18).toFixed(1) + 'px, ' + ((y - 0.5) * 14).toFixed(1) + 'px)';
-    });
-    hero.addEventListener('pointerleave', function () { stage.style.transform = ''; });
-  }
 })();
