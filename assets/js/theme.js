@@ -144,6 +144,8 @@
       var name = '';
       var card = button && button.closest ? button.closest('.product') : null;
       if (card && card.length) { var t = card.find('.card__title, .woocommerce-loop-product__title').first(); name = t.text().trim(); }
+      var named = button && button.closest ? button.closest('[data-product-name]') : null;
+      if (!name && named && named.length) { name = named.attr('data-product-name') || ''; }
       toast(esc(sprintf(D.i18n.added || '%s', name || '')) + ' <a href="' + esc(D.urls.cart || '#') + '">' + esc(D.i18n.viewCart || '') + '</a>');
       if (minicart) { openOverlay(minicart, '.minicart__close'); }
     });

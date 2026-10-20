@@ -17,6 +17,7 @@ get_template_part( 'template-parts/home/marquee' );
 get_template_part( 'template-parts/home/collection', null, array( 'perfumes' => $webni_perfumes ) );
 
 if ( class_exists( 'WooCommerce' ) ) {
+	get_template_part( 'template-parts/home/pair', null, array( 'context' => 'home' ) );
 	foreach ( array( 'featured', 'new', 'best', 'sale', 'recommended' ) as $webni_rail ) {
 		webni_render_rail( $webni_rail );
 	}

@@ -17,6 +17,11 @@ defined( 'ABSPATH' ) || exit;
 function webni_option_defaults() {
 	return array(
 		// Hero.
+		'hero_mode'         => 'image',   // image | animated
+		'hero_image'        => 0,         // attachment ID; falls back to the first perfume's image
+		'hero_image_mobile' => 0,         // optional portrait attachment for phones (cover layout)
+		'hero_layout'       => 'cover',   // cover | split
+		'hero_image_pos'    => 'center',  // object-position for the cover layout
 		'hero_eyebrow'      => 'BP|DL Parfum · Osam recepata koje je napisao AI',
 		'hero_title_1'      => 'Osam karaktera.',
 		'hero_title_2'      => 'Jedan je tvoj.',
@@ -89,6 +94,9 @@ function webni_option_defaults() {
 		'pair_title'         => 'Secondo + Deuxième',
 		'pair_line'          => 'Drugi na dva jezika. Prvi jedno drugom.',
 		'pair_text'          => 'Dva parfema, jedna priča. Za dvoje koji se ne takmiče ko je prvi.',
+		'pair_section_on'    => 1,
+		'pair_section_cta'   => 'Uzmi par',
+		'pair_section_note'  => 'Dva parfema od 50 ml u jednoj kutiji, sa dve kartice karaktera.',
 		// Story.
 		'story_eyebrow' => 'Priča',
 		'story_title'   => 'Pitali smo AI da napiše parfem koji sadrži sve ostale.',
@@ -155,6 +163,33 @@ function webni_customize_register( $wp_customize ) {
 
 	// [key, section, label, type, extra]
 	$fields = array(
+		array( 'hero_mode', 'hero', 'Prikaz prvog ekrana', 'select', array(
+			'choices' => array(
+				'image'    => 'Velika slika (bez animacije)',
+				'animated' => 'Animacija — osam karaktera sa maglom',
+			),
+		) ),
+		array( 'hero_image', 'hero', 'Velika slika', 'image', array(
+			'description' => 'Preporuka: horizontalna fotografija, najmanje 2000 × 1200 px, tamnija sa leve strane gde stoji tekst. Ako slika nije izabrana, koristi se slika prvog parfema pored teksta.',
+		) ),
+		array( 'hero_image_mobile', 'hero', 'Slika za telefon (opciono)', 'image', array(
+			'description' => 'Uspravna verzija iste fotografije (npr. 1200 × 1800 px) za ekrane uže od 900 px. Ako nije izabrana, na telefonu se seče velika slika.',
+		) ),
+		array( 'hero_layout', 'hero', 'Raspored slike', 'select', array(
+			'choices' => array(
+				'cover' => 'Preko celog ekrana, tekst preko slike',
+				'split' => 'Slika desno, tekst levo',
+			),
+		) ),
+		array( 'hero_image_pos', 'hero', 'Koji deo slike ostaje vidljiv pri sečenju', 'select', array(
+			'choices' => array(
+				'center' => 'Sredina',
+				'top'    => 'Gore',
+				'bottom' => 'Dole',
+				'left'   => 'Levo',
+				'right'  => 'Desno',
+			),
+		) ),
 		array( 'hero_eyebrow', 'hero', 'Nadnaslov', 'text' ),
 		array( 'hero_title_1', 'hero', 'Naslov — prvi red', 'text' ),
 		array( 'hero_title_2', 'hero', 'Naslov — drugi red (kurziv)', 'text' ),
@@ -225,6 +260,9 @@ function webni_customize_register( $wp_customize ) {
 		array( 'pair_title', 'gift', 'Par set — naslov', 'text' ),
 		array( 'pair_line', 'gift', 'Par set — linija (kurziv)', 'text' ),
 		array( 'pair_text', 'gift', 'Par set — tekst', 'textarea' ),
+		array( 'pair_section_on', 'gift', 'Prikaži veliku Par set sekciju na početnoj (ispod kolekcije) i na stranicama parfema iz para', 'checkbox' ),
+		array( 'pair_section_cta', 'gift', 'Par set sekcija — dugme', 'text' ),
+		array( 'pair_section_note', 'gift', 'Par set sekcija — napomena ispod cene', 'text' ),
 
 		array( 'story_eyebrow', 'story', 'Nadnaslov', 'text' ),
 		array( 'story_title', 'story', 'Naslov', 'text' ),
@@ -266,17 +304,31 @@ function webni_customize_register( $wp_customize ) {
 		'number'   => 'absint',
 		'checkbox' => 'webni_sanitize_checkbox',
 		'product'  => 'absint',
+		'image'    => 'absint',
+		'select'   => 'webni_sanitize_select',
 	);
 	$products = null;
 
 	foreach ( $fields as $f ) {
 		list( $key, $section, $label, $type ) = $f;
+		$extra = isset( $f[4] ) && is_array( $f[4] ) ? $f[4] : array();
 		$wp_customize->add_setting( 'webni_' . $key, array(
 			'default'           => isset( $defaults[ $key ] ) ? $defaults[ $key ] : '',
 			'sanitize_callback' => $sanitizers[ $type ],
 			'transport'         => 'refresh',
 		) );
 		$args = array( 'label' => $label, 'section' => 'webni_' . $section, 'type' => $type );
+		if ( ! empty( $extra['description'] ) ) {
+			$args['description'] = $extra['description'];
+		}
+		if ( 'select' === $type ) {
+			$args['choices'] = isset( $extra['choices'] ) ? $extra['choices'] : array();
+		}
+		if ( 'image' === $type ) {
+			$args['mime_type'] = 'image';
+			$wp_customize->add_control( new WP_Customize_Media_Control( $wp_customize, 'webni_' . $key, $args ) );
+			continue;
+		}
 		if ( 'product' === $type ) {
 			if ( null === $products ) {
 				$products = array( 0 => '— (nije izabrano)' );
@@ -303,6 +355,20 @@ add_action( 'customize_register', 'webni_customize_register' );
  */
 function webni_sanitize_checkbox( $value ) {
 	return ( true === $value || '1' === $value || 1 === $value ) ? 1 : 0;
+}
+
+/**
+ * Select sanitizer: only a value offered by the control is stored, otherwise the default.
+ *
+ * @param mixed                $value   Value.
+ * @param WP_Customize_Setting $setting Setting.
+ * @return string
+ */
+function webni_sanitize_select( $value, $setting ) {
+	$value   = sanitize_key( (string) $value );
+	$control = $setting->manager->get_control( $setting->id );
+	$choices = $control && ! empty( $control->choices ) ? $control->choices : array();
+	return ( $choices && ! isset( $choices[ $value ] ) ) ? (string) $setting->default : $value;
 }
 
 /**

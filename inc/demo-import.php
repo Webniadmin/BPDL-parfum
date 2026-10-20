@@ -3,8 +3,9 @@
  * Admin tools page: demo product import, store defaults, Serbian URLs, status checks.
  *
  * WooCommerce → BP|DL alati. Every action is a POST with a nonce and requires the
- * "manage_woocommerce" capability. The import is idempotent: products are matched by
- * slug and updated in place, images are uploaded once and reused.
+ * "manage_woocommerce" capability. The import is idempotent and non-destructive: products
+ * are matched by slug, existing ones only get their empty fields filled, images are
+ * uploaded once and reused.
  *
  * @package webni-custom-version-1
  */
@@ -40,7 +41,7 @@ function webni_tools_handle() {
 	switch ( $tool ) {
 		case 'import_products':
 			$result  = webni_import_demo_products();
-			$message = sprintf( 'Demo catalogue imported: %d products created, %d updated, %d images linked (uploaded once, reused afterwards).', $result['created'], $result['updated'], $result['images'] );
+			$message = sprintf( 'Demo catalogue imported: %d products created, %d existing products kept (only empty fields filled), %d images linked (uploaded once, reused afterwards).', $result['created'], $result['updated'], $result['images'] );
 			break;
 		case 'store_defaults':
 			webni_store_defaults( true );
@@ -119,7 +120,7 @@ function webni_tools_page() {
 			<?php wp_nonce_field( 'webni_tools', 'webni_tools_nonce' ); ?>
 			<div class="card" style="max-width:none;padding:16px 20px">
 				<h3 style="margin-top:0">Učitaj demo proizvode</h3>
-				<p>Creates (or updates) the eight perfumes with their character data, palettes, notes, zodiac signs, images, categories (Za njega, Za nju, Unisex, Setovi), the Discovery set and the Par set. Existing products with the same slugs are updated, nothing is deleted.</p>
+				<p>Creates the eight perfumes with their character data, palettes, notes, zodiac signs, images, categories (Za njega, Za nju, Unisex, Setovi), the Discovery set and the Par set. Products that already exist (same slug) are left as they are — your names, prices, texts, images and character data are never overwritten; only fields that are still empty get filled in. Nothing is deleted.</p>
 				<button class="button button-primary" name="webni_tool" value="import_products">Učitaj demo proizvode</button>
 			</div>
 			<div class="card" style="max-width:none;padding:16px 20px">
@@ -190,78 +191,148 @@ function webni_import_image( $file, $title, $parent = 0 ) {
 }
 
 /**
- * Create or update one product from the demo data.
+ * Create one product from the demo data, or fill the gaps of an existing one.
  *
- * @param array $data Product data.
- * @param array $cats Category term IDs by slug.
+ * Existing products (matched by slug) are never overwritten: the shop's own name, prices,
+ * descriptions, images, categories and character data stay as they are and only fields
+ * that are still empty are filled in. New products get the complete demo record.
+ *
+ * @param array $data  Product data.
+ * @param array $cats  Category term IDs by slug.
  * @param array $stats Counters (by reference).
  * @return int Product ID.
  */
 function webni_import_product( $data, $cats, &$stats ) {
 	$existing = get_page_by_path( $data['slug'], OBJECT, 'product' );
 	$product  = $existing ? wc_get_product( $existing->ID ) : null;
-	if ( ! $product ) {
+	$is_new   = ! $product;
+
+	if ( $is_new ) {
 		$product = new WC_Product_Simple();
 		$product->set_slug( $data['slug'] );
+		$product->set_name( $data['name'] );
+		$product->set_status( 'publish' );
+		$product->set_catalog_visibility( 'visible' );
+		$product->set_featured( ! empty( $data['featured'] ) );
+		$product->set_manage_stock( true );
+		$product->set_stock_quantity( 50 );
+		$product->set_stock_status( 'instock' );
+		$product->set_sold_individually( false );
+		$product->set_reviews_allowed( false );
 		$stats['created']++;
 	} else {
 		$stats['updated']++;
 	}
 
-	$product->set_name( $data['name'] );
-	$product->set_status( 'publish' );
-	$product->set_catalog_visibility( 'visible' );
-	$product->set_featured( ! empty( $data['featured'] ) );
-	$product->set_menu_order( (int) $data['n'] );
-	$product->set_regular_price( (string) $data['price'] );
-	$product->set_sale_price( ! empty( $data['sale'] ) ? (string) $data['sale'] : '' );
-	$product->set_short_description( $data['short'] );
-	$product->set_description( $data['long'] );
-	$product->set_manage_stock( true );
-	$product->set_stock_quantity( 50 );
-	$product->set_stock_status( 'instock' );
-	$product->set_sold_individually( false );
-	$product->set_reviews_allowed( false );
-	$product->set_sku( strtoupper( 'BPDL-' . str_replace( '-', '', substr( $data['slug'], 0, 8 ) ) ) );
-	if ( isset( $cats[ $data['category'] ] ) ) {
+	// Fields filled only while empty (always empty on a new product).
+	if ( '' === (string) $product->get_regular_price( 'edit' ) ) {
+		$product->set_regular_price( (string) $data['price'] );
+		$product->set_sale_price( ! empty( $data['sale'] ) ? (string) $data['sale'] : '' );
+	}
+	if ( '' === trim( wp_strip_all_tags( (string) $product->get_short_description( 'edit' ) ) ) ) {
+		$product->set_short_description( $data['short'] );
+	}
+	if ( '' === trim( wp_strip_all_tags( (string) $product->get_description( 'edit' ) ) ) ) {
+		$product->set_description( $data['long'] );
+	}
+	if ( ! $product->get_menu_order( 'edit' ) && (int) $data['n'] ) {
+		$product->set_menu_order( (int) $data['n'] );
+	}
+	if ( ! $product->get_category_ids( 'edit' ) && isset( $cats[ $data['category'] ] ) ) {
 		$product->set_category_ids( array( $cats[ $data['category'] ] ) );
 	}
-	$product->set_weight( '0.25' );
+	if ( '' === (string) $product->get_weight( 'edit' ) ) {
+		$product->set_weight( '0.25' );
+	}
+	if ( '' === (string) $product->get_sku( 'edit' ) ) {
+		try {
+			$product->set_sku( strtoupper( 'BPDL-' . str_replace( '-', '', substr( $data['slug'], 0, 8 ) ) ) );
+		} catch ( WC_Data_Exception $e ) {
+			// SKU already used by another product: leave it empty.
+			unset( $e );
+		}
+	}
 
 	$id = $product->save();
 
-	// Images: the "set" image is the featured one, hero + bottle go to the gallery and the meta.
-	$images = array();
+	// Images: the "set" image is the featured one, hero + bottle feed the character hero and the gallery.
+	// Only the images that are still missing are linked, so pictures uploaded by the shop stay in place.
+	$has_meta    = ! empty( $data['meta'] );
+	$need_image  = ! $product->get_image_id( 'edit' );
+	$need_hero   = $has_meta && ! metadata_exists( 'post', $id, '_bpdl_hero_img' );
+	$need_bottle = $has_meta && ! metadata_exists( 'post', $id, '_bpdl_bottle_img' );
+	$wanted      = array_filter( array(
+		'set'    => $need_image,
+		'hero'   => $need_hero || $is_new,
+		'bottle' => $need_bottle || $is_new,
+	) );
+	$images      = array();
 	foreach ( $data['images'] as $kind => $file ) {
+		if ( ! isset( $wanted[ $kind ] ) ) {
+			continue;
+		}
 		$img_id = webni_import_image( $file, $data['name'] . ' — ' . $kind, $id );
 		if ( $img_id ) {
 			$images[ $kind ] = $img_id;
 			$stats['images']++;
 		}
 	}
-	if ( ! empty( $images['set'] ) ) {
+	if ( $need_image && ! empty( $images['set'] ) ) {
 		$product->set_image_id( $images['set'] );
 	}
-	$gallery = array_values( array_filter( array( $images['hero'] ?? 0, $images['bottle'] ?? 0 ) ) );
-	$product->set_gallery_image_ids( $gallery );
+	if ( $is_new ) {
+		$product->set_gallery_image_ids( array_values( array_filter( array( $images['hero'] ?? 0, $images['bottle'] ?? 0 ) ) ) );
+	}
 	$product->save();
 
-	// Character meta.
-	if ( ! empty( $data['meta'] ) ) {
+	// Character meta: only keys that do not exist yet (the meta box edits are kept).
+	if ( $has_meta ) {
 		foreach ( $data['meta'] as $key => $value ) {
 			if ( in_array( $key, array( 'alt1', 'alt2' ), true ) ) {
 				continue; // Resolved after all products exist.
 			}
-			update_post_meta( $id, '_bpdl_' . $key, $value );
+			if ( ! metadata_exists( 'post', $id, '_bpdl_' . $key ) ) {
+				update_post_meta( $id, '_bpdl_' . $key, $value );
+			}
 		}
-		if ( ! empty( $images['hero'] ) ) {
+		if ( $need_hero && ! empty( $images['hero'] ) ) {
 			update_post_meta( $id, '_bpdl_hero_img', $images['hero'] );
 		}
-		if ( ! empty( $images['bottle'] ) ) {
+		if ( $need_bottle && ! empty( $images['bottle'] ) ) {
 			update_post_meta( $id, '_bpdl_bottle_img', $images['bottle'] );
 		}
 	}
 	return (int) $id;
+}
+
+/**
+ * Whether a Customizer product picker points to an existing product.
+ *
+ * @param int $id Product ID.
+ * @return bool
+ */
+function webni_pair_product_valid( $id ) {
+	return $id > 0 && 'product' === get_post_type( $id ) && 'trash' !== get_post_status( $id );
+}
+
+/**
+ * Add products to a product's cross-sells without removing the ones the shop already linked.
+ *
+ * @param int   $product_id Product.
+ * @param int[] $add        Product IDs to add.
+ */
+function webni_add_cross_sells( $product_id, $add ) {
+	$product = wc_get_product( $product_id );
+	$add     = array_values( array_filter( array_map( 'intval', (array) $add ) ) );
+	if ( ! $product || ! $add ) {
+		return;
+	}
+	$current = array_map( 'intval', $product->get_cross_sell_ids( 'edit' ) );
+	$merged  = array_values( array_unique( array_merge( $current, $add ) ) );
+	if ( $merged !== $current ) {
+		$product->set_cross_sell_ids( $merged );
+		$product->save();
+	}
 }
 
 /**
@@ -296,41 +367,47 @@ function webni_import_demo_products() {
 	foreach ( webni_demo_perfumes() as $p ) {
 		$ids[ $p['slug'] ] = webni_import_product( $p, $cats, $stats );
 	}
-	// "Probaj i" links need all IDs.
+	// "Probaj i" links need all IDs (kept when already chosen in the meta box).
 	foreach ( webni_demo_perfumes() as $p ) {
 		$id = $ids[ $p['slug'] ];
 		foreach ( array( 'alt1', 'alt2' ) as $k ) {
 			$slug = $p['meta'][ $k ] ?? '';
-			if ( $slug && isset( $ids[ $slug ] ) ) {
+			if ( $slug && isset( $ids[ $slug ] ) && ! metadata_exists( 'post', $id, '_bpdl_' . $k ) ) {
 				update_post_meta( $id, '_bpdl_' . $k, $ids[ $slug ] );
 			}
 		}
 	}
 
-	// Sets.
+	// Sets. The Customizer pickers are only set while they point to nothing.
+	$pair_id      = 0;
+	$pair_members = array();
 	foreach ( webni_demo_sets() as $s ) {
 		$id = webni_import_product( $s, $cats, $stats );
 		if ( 'discovery' === $s['role'] ) {
-			set_theme_mod( 'webni_discovery_product', $id );
-		} elseif ( 'pair' === $s['role'] ) {
-			set_theme_mod( 'webni_pair_product', $id );
-			// The pair set cross-sells on the cart page.
-			$pair = wc_get_product( $id );
-			if ( $pair ) {
-				$pair->set_cross_sell_ids( array_values( array_intersect_key( $ids, array( 'secondo' => 1, 'deuxieme' => 1 ) ) ) );
-				$pair->save();
+			if ( ! webni_pair_product_valid( (int) webni_option( 'discovery_product', 0 ) ) ) {
+				set_theme_mod( 'webni_discovery_product', $id );
 			}
+		} elseif ( 'pair' === $s['role'] ) {
+			if ( ! webni_pair_product_valid( (int) webni_option( 'pair_product', 0 ) ) ) {
+				set_theme_mod( 'webni_pair_product', $id );
+			}
+			$pair_id      = $id;
+			$pair_members = array_values( array_intersect_key( $ids, array( 'secondo' => 1, 'deuxieme' => 1 ) ) );
+			// The two perfumes are the set's linked products (cross-sells): the theme reads them from there.
+			webni_add_cross_sells( $id, $pair_members );
 		}
 	}
-	// Perfumes cross-sell the discovery set.
-	if ( ! empty( $ids ) && webni_option( 'discovery_product', 0 ) ) {
-		foreach ( $ids as $pid ) {
-			$product = wc_get_product( $pid );
-			if ( $product ) {
-				$product->set_cross_sell_ids( array( (int) webni_option( 'discovery_product', 0 ) ) );
-				$product->save();
-			}
+	// Perfumes cross-sell the discovery set; the two perfumes of the pair also cross-sell the Par set.
+	$discovery_id = (int) webni_option( 'discovery_product', 0 );
+	foreach ( $ids as $pid ) {
+		$extra = array();
+		if ( $discovery_id ) {
+			$extra[] = $discovery_id;
 		}
+		if ( $pair_id && in_array( $pid, $pair_members, true ) ) {
+			$extra[] = $pair_id;
+		}
+		webni_add_cross_sells( $pid, $extra );
 	}
 
 	if ( function_exists( 'wc_delete_product_transients' ) ) {

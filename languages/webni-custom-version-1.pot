@@ -2,14 +2,14 @@
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Webni Custom Version 1 Theme 1.0.1\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/webni-custom-version-1\n"
+"Project-Id-Version: Webni Custom Version 1 Theme 1.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/bpdl-parfum\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-06T08:21:58+00:00\n"
+"POT-Creation-Date: 2026-10-20T11:48:44+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: webni-custom-version-1\n"
@@ -158,7 +158,7 @@ msgstr ""
 #: header.php:45
 #: header.php:69
 #: inc/quiz.php:87
-#: template-parts/product/perfume.php:124
+#: template-parts/product/perfume.php:128
 msgid "Poklon"
 msgstr ""
 
@@ -253,24 +253,24 @@ msgstr ""
 msgid "Open the BP|DL tools (demo products, settings check)."
 msgstr ""
 
-#: inc/demo-import.php:33
+#: inc/demo-import.php:34
 msgid "You are not allowed to do this."
 msgstr ""
 
-#: inc/enqueue.php:96
+#: inc/enqueue.php:97
 msgid "%s je u korpi."
 msgstr ""
 
-#: inc/enqueue.php:97
+#: inc/enqueue.php:98
 #: inc/woocommerce.php:87
 msgid "Vidi korpu"
 msgstr ""
 
-#: inc/enqueue.php:98
+#: inc/enqueue.php:99
 msgid "Kopirano. Nalepi u story ili poruku."
 msgstr ""
 
-#: inc/enqueue.php:99
+#: inc/enqueue.php:100
 #: inc/woocommerce.php:165
 #: template-parts/home/collection.php:25
 msgid "Nema parfema za ovaj izbor."
@@ -550,7 +550,7 @@ msgstr ""
 
 #. translators: %s character
 #: inc/quiz.php:74
-#: template-parts/product/perfume.php:128
+#: template-parts/product/perfume.php:132
 msgid "Pronađi njihov miris"
 msgstr ""
 
@@ -631,20 +631,21 @@ msgstr ""
 msgid "Unisex"
 msgstr ""
 
-#: inc/template-tags.php:383
+#: inc/template-tags.php:496
 #: inc/woocommerce.php:193
+#: template-parts/home/pair.php:41
 msgid "Akcija"
 msgstr ""
 
-#: inc/template-tags.php:384
+#: inc/template-tags.php:497
 msgid "Rasprodato"
 msgstr ""
 
-#: inc/template-tags.php:468
+#: inc/template-tags.php:599
 msgid "Čeka odobrenje"
 msgstr ""
 
-#: inc/template-tags.php:471
+#: inc/template-tags.php:602
 msgid "Odgovori"
 msgstr ""
 
@@ -913,11 +914,20 @@ msgid "Naruči discovery set"
 msgstr ""
 
 #: template-parts/home/gift.php:62
+#: template-parts/home/pair.php:75
 msgid "Uzmi par"
 msgstr ""
 
-#: template-parts/home/hero.php:60
+#: template-parts/home/hero.php:103
 msgid "Osam karaktera"
+msgstr ""
+
+#: template-parts/home/pair.php:27
+msgid "Dolazi i u paru"
+msgstr ""
+
+#: template-parts/home/pair.php:52
+msgid "Parfemi u setu"
 msgstr ""
 
 #. translators: %s product name
@@ -1002,29 +1012,29 @@ msgid "Baza"
 msgstr ""
 
 #. translators: %s zodiac signs
-#: template-parts/product/perfume.php:126
+#: template-parts/product/perfume.php:130
 msgid "Idealan za %s."
 msgstr ""
 
 #. translators: %s zodiac signs
-#: template-parts/product/perfume.php:126
+#: template-parts/product/perfume.php:130
 msgid "Idealan poklon."
 msgstr ""
 
 #. translators: %s character
-#: template-parts/product/perfume.php:127
+#: template-parts/product/perfume.php:131
 msgid "Kartica karaktera je u pakovanju: piše „Ti si %s“, pa poklon ima priču pre nego što se otvori."
 msgstr ""
 
-#: template-parts/product/perfume.php:132
+#: template-parts/product/perfume.php:136
 msgid "Ako ti se dopada, probaj i"
 msgstr ""
 
-#: template-parts/product/perfume.php:151
+#: template-parts/product/perfume.php:155
 msgid "Nije to?"
 msgstr ""
 
-#: template-parts/product/perfume.php:153
+#: template-parts/product/perfume.php:157
 msgid "Pet pitanja, 40 sekundi, i znaš koji si karakter."
 msgstr ""
 

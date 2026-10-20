@@ -359,6 +359,119 @@ function webni_discovery_url() {
 	return webni_shop_url();
 }
 
+/**
+ * Home hero mode: 'image' (one large static picture) or 'animated' (WebGL mist cycling the characters).
+ *
+ * @return string
+ */
+function webni_hero_mode() {
+	return 'animated' === webni_option( 'hero_mode', 'image' ) ? 'animated' : 'image';
+}
+
+/**
+ * Attachment used by the static hero: the Customizer image, otherwise the first perfume's featured image.
+ *
+ * @return array{id:int,fallback:bool}
+ */
+function webni_hero_image() {
+	$id = (int) webni_option( 'hero_image', 0 );
+	if ( $id && wp_attachment_is_image( $id ) ) {
+		return array( 'id' => $id, 'fallback' => false );
+	}
+	$ids = function_exists( 'wc_get_product' ) ? webni_get_perfume_ids() : array();
+	foreach ( $ids as $pid ) {
+		$product = wc_get_product( $pid );
+		if ( $product && $product->get_image_id() ) {
+			return array( 'id' => (int) $product->get_image_id(), 'fallback' => true );
+		}
+	}
+	return array( 'id' => 0, 'fallback' => true );
+}
+
+/**
+ * Hero picture markup: the large image, with the optional portrait image served to phones.
+ *
+ * @param int    $id    Attachment ID.
+ * @param string $pos   object-position keyword.
+ * @param string $sizes Sizes attribute for the large image.
+ * @return string
+ */
+function webni_hero_picture( $id, $pos = 'center', $sizes = '100vw' ) {
+	$img = wp_get_attachment_image( $id, 'full', false, array(
+		'class'         => 'hero__img',
+		'style'         => 'object-position:' . $pos,
+		'loading'       => 'eager',
+		'fetchpriority' => 'high',
+		'decoding'      => 'async',
+		'sizes'         => $sizes,
+	) );
+	if ( ! $img ) {
+		return '';
+	}
+	$mobile = (int) webni_option( 'hero_image_mobile', 0 );
+	if ( ! $mobile || ! wp_attachment_is_image( $mobile ) ) {
+		return $img;
+	}
+	$srcset = wp_get_attachment_image_srcset( $mobile, 'full' );
+	$src    = wp_get_attachment_image_url( $mobile, 'full' );
+	if ( ! $src ) {
+		return $img;
+	}
+	return '<picture><source media="(max-width: 900px)" srcset="' . esc_attr( $srcset ? $srcset : $src ) . '" sizes="100vw">' . $img . '</picture>';
+}
+
+/**
+ * The Par set product (Customizer → Poklon), only when published and purchasable.
+ *
+ * @return WC_Product|null
+ */
+function webni_pair_product() {
+	if ( ! function_exists( 'wc_get_product' ) ) {
+		return null;
+	}
+	$id = (int) webni_option( 'pair_product', 0 );
+	if ( ! $id || 'publish' !== get_post_status( $id ) ) {
+		return null;
+	}
+	$product = wc_get_product( $id );
+	return $product ? $product : null;
+}
+
+/**
+ * The perfumes that make up the Par set: its WooCommerce cross-sells (Products → Linked products).
+ *
+ * @return WC_Product[]
+ */
+function webni_pair_members() {
+	$pair = webni_pair_product();
+	if ( ! $pair ) {
+		return array();
+	}
+	$members = array();
+	foreach ( $pair->get_cross_sell_ids() as $id ) {
+		$product = wc_get_product( $id );
+		if ( $product && 'publish' === $product->get_status() ) {
+			$members[] = $product;
+		}
+	}
+	return $members;
+}
+
+/**
+ * Whether a product is one of the perfumes sold in the Par set.
+ *
+ * @param int $product_id Product ID.
+ * @return bool
+ */
+function webni_is_pair_member( $product_id ) {
+	foreach ( webni_pair_members() as $member ) {
+		if ( (int) $member->get_id() === (int) $product_id ) {
+			return true;
+		}
+	}
+	return false;
+}
+
 /* -------------------------------------------------------------------------
  * Output helpers
  * ---------------------------------------------------------------------- */
@@ -393,10 +506,28 @@ function webni_product_card( $product, $index = 0, $tag = false ) {
 			</div>
 		</a>
 		<?php if ( $product->is_purchasable() && $product->is_in_stock() && $product->is_type( 'simple' ) ) : ?>
-			<div class="card__add"><?php woocommerce_template_loop_add_to_cart( array( 'class' => 'btn btn--sm btn--solid add_to_cart_button ajax_add_to_cart product_type_simple' ) ); ?></div>
+			<div class="card__add"><?php webni_add_to_cart_button( $product, 'btn btn--sm btn--solid' ); ?></div>
 		<?php endif; ?>
 	</<?php echo $el; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 	<?php
+}
+
+/**
+ * WooCommerce AJAX "U korpu" button for a simple product, usable outside the shop loop
+ * (home collection, rails, Par set band). WooCommerce reads the global $product, so it is
+ * set for the call and restored afterwards.
+ *
+ * @param WC_Product $product Product.
+ * @param string     $class   Button classes.
+ */
+function webni_add_to_cart_button( $product, $class = 'btn btn--solid' ) {
+	if ( ! function_exists( 'woocommerce_template_loop_add_to_cart' ) || ! $product instanceof WC_Product ) {
+		return;
+	}
+	$previous           = isset( $GLOBALS['product'] ) ? $GLOBALS['product'] : null;
+	$GLOBALS['product'] = $product; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+	woocommerce_template_loop_add_to_cart( array( 'class' => $class . ' add_to_cart_button ajax_add_to_cart product_type_simple' ) );
+	$GLOBALS['product'] = $previous; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 }
 
 /**

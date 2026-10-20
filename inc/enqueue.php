@@ -36,12 +36,13 @@ function webni_enqueue_assets() {
 	wp_enqueue_script( 'webni-theme', WEBNI_THEME_URI . '/assets/js/theme.js', array(), $v, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 	wp_localize_script( 'webni-theme', 'BPDL', webni_js_data() );
 
-	// WebGL mist is only needed where a hero exists.
-	if ( is_front_page() || ( function_exists( 'is_product' ) && is_product() ) ) {
+	// WebGL mist is only needed where an animated hero exists (product pages; home only in the "animated" mode).
+	$home_animated = is_front_page() && 'animated' === webni_hero_mode();
+	if ( $home_animated || ( function_exists( 'is_product' ) && is_product() ) ) {
 		wp_enqueue_script( 'webni-mist', WEBNI_THEME_URI . '/assets/js/mist.js', array(), $v, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 	}
 	if ( is_front_page() ) {
-		wp_enqueue_script( 'webni-home', WEBNI_THEME_URI . '/assets/js/home.js', array( 'webni-theme', 'webni-mist' ), $v, array( 'in_footer' => true, 'strategy' => 'defer' ) );
+		wp_enqueue_script( 'webni-home', WEBNI_THEME_URI . '/assets/js/home.js', $home_animated ? array( 'webni-theme', 'webni-mist' ) : array( 'webni-theme' ), $v, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 	}
 	if ( function_exists( 'is_product' ) && is_product() ) {
 		wp_enqueue_script( 'webni-product', WEBNI_THEME_URI . '/assets/js/product.js', array( 'webni-theme', 'webni-mist' ), $v, array( 'in_footer' => true, 'strategy' => 'defer' ) );

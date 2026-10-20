@@ -27,7 +27,7 @@ Full product documentation: `README.md`. Staging: the client's `*-dev` subdomain
 | WooCommerce hooks/layout | `inc/woocommerce.php` (loop, single summary, cart fragments, checkout fields, rails) |
 | Activation, pages, store defaults, menus, upgrade routine | `inc/activation.php` (+ `inc/demo-content.php` page texts) |
 | Admin tools + demo import | `inc/demo-import.php` (WooCommerce → BP\|DL alati), data in `inc/demo-data.php` |
-| Home | `front-page.php` + `template-parts/home/*` |
+| Home | `front-page.php` + `template-parts/home/*` (`hero.php` has the image/animated modes, `pair.php` is the Par set band, also used on product pages) |
 | Product page | `template-parts/product/perfume.php` (character landing) / `simple.php` (sets) |
 | Styles | `assets/css/fonts.css`, `theme.css`, `woocommerce.css` |
 | Scripts | `assets/js/theme.js`, `mist.js` (WebGL), `home.js`, `product.js` |
@@ -38,6 +38,8 @@ Full product documentation: `README.md`. Staging: the client's `*-dev` subdomain
 - Changing the shop page or permalink options requires a rewrite flush: set `update_option('webni_flush_rewrite', 1)`; `webni_maybe_flush_rewrite()` does a hard flush and verifies `.htaccess` (missing block ⇒ every `/wp-json/` call 404s ⇒ hosting firewalls ban the admin's IP).
 - Cart/checkout/account pages are WooCommerce shortcode pages rendered by `page.php` with the wide `.shop-page` layout.
 - Product cards carry `data-cat` (M/Ž/U/'') and `data-time` for the client-side filters.
+- WooCommerce's loop add-to-cart reads the global `$product`; outside the shop loop use `webni_add_to_cart_button()` (sets and restores it).
+- The Par set's two perfumes are its cross-sell IDs (`webni_pair_members()`); the demo import must stay non-destructive (fill empty fields only, merge cross-sells).
 
 ## Commands
 ```bash

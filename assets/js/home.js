@@ -1,4 +1,6 @@
-/* Home hero: cycles through the eight characters (palette, mist colours, name, photo). */
+/* Home hero.
+   "image" mode: one static picture; only the character name in "Ti si …" keeps cycling.
+   "animated" mode: cycles through the eight characters (palette, mist colours, name, photo). */
 (function () {
   'use strict';
   var D = window.BPDL;
@@ -8,6 +10,18 @@
   if (!hero || !hero.classList.contains('hero--home')) { return; }
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fine = window.matchMedia('(pointer: fine)').matches;
+
+  if (hero.getAttribute('data-mode') === 'image') {
+    var el = document.getElementById('cycleName');
+    if (!el || reduce || P.length < 2) { return; }
+    var k = 0;
+    setInterval(function () {
+      k = (k + 1) % P.length;
+      window.BPDL_scramble(el, P[k].character);
+    }, 3800);
+    return;
+  }
+
   var canvas = hero.querySelector('.mist');
   var mist = canvas && window.WebniMist ? window.WebniMist(canvas, P[0].palette) : null;
   var nameEl = document.getElementById('cycleName');

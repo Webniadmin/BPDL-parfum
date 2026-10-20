@@ -118,6 +118,10 @@ $notes    = $d['notes'];
 
 <?php get_template_part( 'template-parts/home/quality', null, array( 'compact' => true, 'name' => $d['name'] ) ); ?>
 
+<?php if ( webni_is_pair_member( $product->get_id() ) ) : ?>
+	<?php get_template_part( 'template-parts/home/pair', null, array( 'context' => 'product', 'current' => $product->get_id() ) ); ?>
+<?php endif; ?>
+
 <section class="section">
 	<div class="container split">
 		<div class="reveal">

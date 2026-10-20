@@ -3,7 +3,7 @@
 Custom WordPress + WooCommerce theme for **BP|DL Parfum** — eight AI-written perfume recipes, one dark "character" world, Serbian (Latin) storefront.
 
 - Theme slug / text domain: `webni-custom-version-1`
-- Version: 1.0.1
+- Version: 1.1.0
 - Requires: WordPress 6.4+, PHP 8.1+, WooCommerce 8.0+ (tested with 10.1)
 - Forms: Gravity Forms (optional at install time, required for newsletter / quiz e-mail / contact)
 - No page builders, no CDN fonts, no third-party requests from the theme.
@@ -19,8 +19,9 @@ Custom WordPress + WooCommerce theme for **BP|DL Parfum** — eight AI-written p
    - applies store defaults (see §4) unless they were applied before;
    - applies the Serbian URL structure (§3) and flushes rewrite rules;
    - creates the four menus and assigns them to empty menu locations.
-3. Open **WooCommerce → BP|DL alati** and click **Učitaj demo proizvode** to load the eight perfumes, the Discovery set and the Par set (images included). The tool is idempotent: products are matched by slug and updated, never deleted.
-4. Install Gravity Forms, create the forms (§5) and enter their IDs in **Appearance → Customize → BP|DL Parfum → Newsletter i forme**.
+3. Open **WooCommerce → BP|DL alati** and click **Učitaj demo proizvode** to load the eight perfumes, the Discovery set and the Par set (images included). The tool is idempotent and non-destructive: products are matched by slug; existing ones keep their names, prices, texts, images and character data and only empty fields are filled; nothing is deleted. It is safe to run again after a theme update.
+4. Choose the home hero picture in **Appearance → Customize → BP|DL Parfum → Hero (prvi ekran)** (see §7). Until one is chosen the first perfume's product image is shown next to the headline.
+5. Install Gravity Forms, create the forms (§5) and enter their IDs in **Appearance → Customize → BP|DL Parfum → Newsletter i forme**.
 
 Nothing in the theme hardcodes a domain; it works on `bpdlparfum-dev.webni.me`, on production, or locally.
 
@@ -28,10 +29,10 @@ Nothing in the theme hardcodes a domain; it works on `bpdlparfum-dev.webni.me`, 
 
 | URL | Template | Notes |
 | --- | --- | --- |
-| `/` | `front-page.php` + `template-parts/home/*` | Hero with WebGL mist cycling the eight characters, marquee, collection (all perfumes + filters), product rails, "Zašto 30%", quiz teaser, gift (zodiac + Discovery/Par set), story + worlds, newsletter. |
+| `/` | `front-page.php` + `template-parts/home/*` | Hero (one large static picture by default, or the WebGL mist cycling the eight characters), marquee, collection (all perfumes + filters), Par set band, product rails, "Zašto 30%", quiz teaser, gift (zodiac + Discovery/Par set), story + worlds, newsletter. |
 | `/parfemi/` | WooCommerce archive (hooks, `content-product.php`) | Breadcrumb, title + intro, filter chips (client-side), result count, sorting, pagination, AJAX "U korpu" on cards. |
 | `/kategorija-parfema/{slug}/` | same archive | Category name + description. |
-| `/parfem/{slug}/` | `woocommerce/content-single-product.php` | Perfumes (products with character data) get the full landing: hero with mist + add-to-cart, "Ko ga nosi", facts, notes, 30%, gift + "Probaj i", CTA band. Other products (sets) use `template-parts/product/simple.php`. |
+| `/parfem/{slug}/` | `woocommerce/content-single-product.php` | Perfumes (products with character data) get the full landing: hero with mist + add-to-cart, "Ko ga nosi", facts, notes, 30%, Par set band (on the two perfumes sold in the set), gift + "Probaj i", CTA band. Other products (sets) use `template-parts/product/simple.php`. |
 | `/korpa/`, `/placanje/`, `/moj-nalog/…` | WooCommerce shortcodes on the pages, styled by `assets/css/woocommerce.css` | Classic cart/checkout/account templates (hooks, not overrides). |
 | `/pretraga/{term}/?post_type=product` | WooCommerce archive | Header search searches products. |
 | blog / pages / search / 404 | `index.php`, `single.php`, `page.php`, `archive.php`, `search.php`, `404.php` | |
@@ -79,9 +80,11 @@ A product appears in the home collection, the hero strip and the quiz only when 
 
 Home rails (Istaknuti = featured products, Novo, Najprodavaniji, Akcije = on sale, Preporučeni = hand-picked IDs) are switched on/off in **Customize → Kolekcija i sekcije sa proizvodima**.
 
+**Par set.** The set product is chosen in **Customize → Poklon → Par set — proizvod**; the two perfumes it contains are its WooCommerce *Linked products → Cross-sells* (the demo import links Secondo and Deuxième). The theme shows the set as a large band below the home collection and on the product pages of those two perfumes (toggle, button text and note in **Customize → Poklon**), as the third gift card, and WooCommerce cross-sells it in the cart next to those two perfumes.
+
 ## 7. Customizer (Appearance → Customize → BP|DL Parfum)
 
-Hero, Kolekcija i sekcije sa proizvodima, Zašto 30%, Quiz, Poklon (incl. Discovery set / Par set product pickers), Priča, Newsletter i forme (Gravity Forms IDs), Prodavnica i stranica proizvoda (shop title/intro, delivery line, free-shipping text, product texts), Futer i kontakt (tagline, contact e-mail/phone/address, Instagram/TikTok/Facebook/YouTube, payment line, copyright with `{year}`). Logo: **Site Identity → Logo** (text wordmark is used when no logo is set). Menus: *Glavna navigacija*, *Futer — Sajt*, *Futer — Pomoć*, *Futer — Pravno*. One optional widget area: *Futer — dodatno*.
+Hero (display mode: *Velika slika* — one large picture, full-bleed with the copy over it or next to the copy, optional portrait version for phones, crop focus — or *Animacija* with the WebGL mist; texts and buttons), Kolekcija i sekcije sa proizvodima, Zašto 30%, Quiz, Poklon (incl. Discovery set / Par set product pickers and the Par set band), Priča, Newsletter i forme (Gravity Forms IDs), Prodavnica i stranica proizvoda (shop title/intro, delivery line, free-shipping text, product texts), Futer i kontakt (tagline, contact e-mail/phone/address, Instagram/TikTok/Facebook/YouTube, payment line, copyright with `{year}`). Logo: **Site Identity → Logo** (text wordmark is used when no logo is set). Menus: *Glavna navigacija*, *Futer — Sajt*, *Futer — Pomoć*, *Futer — Pravno*. One optional widget area: *Futer — dodatno*.
 
 ## 8. Serbian storefront strings
 
@@ -115,6 +118,8 @@ Theme strings use the `webni-custom-version-1` domain (`languages/webni-custom-v
 - Card payments: install and configure the bank's plugin; no theme change is needed.
 
 ## Changelog
+
+**1.1.0** — Home hero can be one large static picture (default; Customizer: image, optional phone image, cover/split layout, crop focus) instead of the WebGL animation, which stays available as *Animacija*; `mist.js` is no longer loaded on the home page in image mode. New Par set band below the home collection and on the product pages of the two perfumes in the set, with AJAX add-to-cart; Secondo/Deuxième cross-sell the set in the cart. Demo import is now non-destructive (existing products keep their data and images; only empty fields are filled). Fixed: AJAX "U korpu" buttons were empty on the home collection and rails.
 
 **1.0.1** — Pretty permalinks are now written to `.htaccess` on activation/update (hard flush) and verified; when the file cannot be written the theme falls back to plain URLs and shows an admin notice with the block to paste (a missing block made every `/wp-json/` call 404, which hosting firewalls treat as a scan). Update routine after file replacement. Removed 16 unused images.
 
