@@ -192,8 +192,21 @@ function webni_perfume( $product ) {
 		$terms          = wp_get_post_terms( $id, 'product_cat', array( 'fields' => 'names' ) );
 		$labels['']     = ! is_wp_error( $terms ) && $terms ? $terms[0] : '';
 	}
-	$hero_id  = (int) $m( 'hero_img' ) ?: $product->get_image_id();
-	$bottle   = (int) $m( 'bottle_img' ) ?: $hero_id;
+	$featured = (int) $product->get_image_id();
+	$hero_id  = (int) $m( 'hero_img' );
+	$bottle   = (int) $m( 'bottle_img' );
+	// A picture the shop uploaded replaces the demo cutouts everywhere: the imported meta would
+	// otherwise keep showing the demo bottle in the hero, the quiz result and the "Probaj i" cards.
+	if ( $featured && ! webni_is_demo_image( $featured ) ) {
+		if ( ! $hero_id || webni_is_demo_image( $hero_id ) ) {
+			$hero_id = $featured;
+		}
+		if ( ! $bottle || webni_is_demo_image( $bottle ) ) {
+			$bottle = $featured;
+		}
+	}
+	$hero_id = $hero_id ?: $featured;
+	$bottle  = $bottle ?: $hero_id;
 
 	return array(
 		'id'        => $id,
@@ -229,9 +242,14 @@ function webni_perfume( $product ) {
 		'quiz_desc' => $m( 'quiz_desc' ),
 		'cat'       => $audience,
 		'cat_label' => $labels[ $audience ],
-		'image_id'  => $product->get_image_id(),
+		'image_id'  => $featured,
 		'hero_id'   => $hero_id,
 		'bottle_id' => $bottle,
+		'cutout'    => array(
+			'card'   => webni_image_is_cutout( $featured ),
+			'hero'   => webni_image_is_cutout( $hero_id ),
+			'bottle' => webni_image_is_cutout( $bottle ),
+		),
 		'price'     => $product->get_price_html(),
 		'in_stock'  => $product->is_in_stock(),
 	);
@@ -276,6 +294,7 @@ function webni_perfume_js( $product ) {
 			'hero'   => $img( $d['hero_id'], 'webni-hero' ),
 			'bottle' => $img( $d['bottle_id'], 'webni-card' ),
 		),
+		'cutout'    => $d['cutout'],
 	);
 }
 
@@ -371,21 +390,21 @@ function webni_hero_mode() {
 /**
  * Attachment used by the static hero: the Customizer image, otherwise the first perfume's featured image.
  *
- * @return array{id:int,fallback:bool}
+ * @return array{id:int,fallback:bool,cutout:bool}
  */
 function webni_hero_image() {
 	$id = (int) webni_option( 'hero_image', 0 );
 	if ( $id && wp_attachment_is_image( $id ) ) {
-		return array( 'id' => $id, 'fallback' => false );
+		return array( 'id' => $id, 'fallback' => false, 'cutout' => webni_image_is_cutout( $id ) );
 	}
 	$ids = function_exists( 'wc_get_product' ) ? webni_get_perfume_ids() : array();
 	foreach ( $ids as $pid ) {
-		$product = wc_get_product( $pid );
-		if ( $product && $product->get_image_id() ) {
-			return array( 'id' => (int) $product->get_image_id(), 'fallback' => true );
+		$d = webni_perfume( $pid );
+		if ( $d && $d['hero_id'] ) {
+			return array( 'id' => (int) $d['hero_id'], 'fallback' => true, 'cutout' => (bool) $d['cutout']['hero'] );
 		}
 	}
-	return array( 'id' => 0, 'fallback' => true );
+	return array( 'id' => 0, 'fallback' => true, 'cutout' => false );
 }
 
 /**
@@ -579,7 +598,113 @@ function webni_perfume_image( $d, $kind = 'hero', $attrs = array() ) {
 		return '';
 	}
 	$attrs = wp_parse_args( $attrs, array( 'class' => 'pack pack--' . $kind, 'loading' => 'lazy' ) );
+	if ( empty( $d['cutout'][ $kind ] ) ) {
+		$attrs['class'] .= ' pack--photo'; // Rectangular photo: framed and cropped instead of floating.
+	}
 	return wp_get_attachment_image( $pick[0], $pick[1], false, $attrs );
+}
+
+/**
+ * Whether an attachment is one of the theme's demo pictures (imported from assets/images).
+ *
+ * @param int $id Attachment ID.
+ * @return bool
+ */
+function webni_is_demo_image( $id ) {
+	return $id > 0 && metadata_exists( 'post', (int) $id, '_webni_demo_image' );
+}
+
+/**
+ * Whether an image has a transparent background (a cutout that can float on the palette) or is a
+ * rectangular photo. Decided once per attachment from the alpha of its corner pixels and cached in
+ * attachment meta; the demo cutouts are known. Filter: webni_image_is_cutout.
+ *
+ * @param int $id Attachment ID.
+ * @return bool
+ */
+function webni_image_is_cutout( $id ) {
+	$id = (int) $id;
+	if ( ! $id ) {
+		return false;
+	}
+	$cached = get_post_meta( $id, '_webni_cutout', true );
+	if ( '' !== $cached && null !== $cached ) {
+		return (bool) apply_filters( 'webni_image_is_cutout', (bool) (int) $cached, $id );
+	}
+	$cutout = webni_is_demo_image( $id ) ? true : webni_detect_cutout( $id );
+	update_post_meta( $id, '_webni_cutout', $cutout ? 1 : 0 );
+	return (bool) apply_filters( 'webni_image_is_cutout', $cutout, $id );
+}
+
+/**
+ * Corner-pixel alpha test on the smallest generated size (GD); falls back to the file header.
+ *
+ * @param int $id Attachment ID.
+ * @return bool
+ */
+function webni_detect_cutout( $id ) {
+	$mime = get_post_mime_type( $id );
+	if ( ! in_array( $mime, array( 'image/png', 'image/webp', 'image/gif' ), true ) ) {
+		return false; // JPEG and the rest have no alpha channel.
+	}
+	$file = get_attached_file( $id );
+	if ( ! $file || ! is_readable( $file ) ) {
+		return false;
+	}
+	// Prefer the thumbnail: same transparency, a fraction of the memory.
+	$meta = wp_get_attachment_metadata( $id );
+	if ( ! empty( $meta['sizes']['thumbnail']['file'] ) ) {
+		$thumb = path_join( dirname( $file ), $meta['sizes']['thumbnail']['file'] );
+		if ( is_readable( $thumb ) && get_post_mime_type( $id ) === ( $meta['sizes']['thumbnail']['mime-type'] ?? $mime ) ) {
+			$file = $thumb;
+		}
+	}
+	if ( function_exists( 'imagecreatefrompng' ) ) {
+		$im = false;
+		if ( 'image/png' === $mime ) {
+			$im = @imagecreatefrompng( $file ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		} elseif ( 'image/webp' === $mime && function_exists( 'imagecreatefromwebp' ) ) {
+			$im = @imagecreatefromwebp( $file ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		} elseif ( 'image/gif' === $mime && function_exists( 'imagecreatefromgif' ) ) {
+			$im = @imagecreatefromgif( $file ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		}
+		if ( $im ) {
+			$w = imagesx( $im );
+			$h = imagesy( $im );
+			$transparent = 0;
+			foreach ( array( array( 1, 1 ), array( $w - 2, 1 ), array( 1, $h - 2 ), array( $w - 2, $h - 2 ) ) as $pt ) {
+				$x     = max( 0, min( $w - 1, $pt[0] ) );
+				$y     = max( 0, min( $h - 1, $pt[1] ) );
+				$alpha = ( imagecolorat( $im, $x, $y ) >> 24 ) & 0x7F; // 0 opaque … 127 transparent.
+				if ( $alpha > 64 ) {
+					$transparent++;
+				}
+			}
+			imagedestroy( $im );
+			return $transparent >= 3;
+		}
+	}
+	// No GD: trust the header (PNG colour type with alpha, WebP alpha flag).
+	$fh = fopen( $file, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+	if ( ! $fh ) {
+		return false;
+	}
+	$head = (string) fread( $fh, 64 ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
+	fclose( $fh ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+	if ( 0 === strpos( $head, "\x89PNG" ) && strlen( $head ) > 25 ) {
+		return in_array( ord( $head[25] ), array( 4, 6 ), true );
+	}
+	if ( 'RIFF' === substr( $head, 0, 4 ) && 'WEBP' === substr( $head, 8, 4 ) ) {
+		$chunk = substr( $head, 12, 4 );
+		if ( 'VP8X' === $chunk ) {
+			return (bool) ( ord( $head[20] ) & 0x10 );
+		}
+		if ( 'VP8L' === $chunk && strlen( $head ) > 25 ) {
+			$bits = ord( $head[22] ) | ( ord( $head[23] ) << 8 ) | ( ord( $head[24] ) << 16 ) | ( ord( $head[25] ) << 24 );
+			return (bool) ( ( $bits >> 28 ) & 1 );
+		}
+	}
+	return false;
 }
 
 /**

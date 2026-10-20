@@ -32,8 +32,9 @@ if ( 'image' === $mode ) {
 	if ( ! in_array( $pos, array( 'center', 'top', 'bottom', 'left', 'right' ), true ) ) {
 		$pos = 'center';
 	}
-	if ( $image['fallback'] ) {
-		// A product shot next to the copy reads better than a cropped product shot behind it.
+	if ( $image['fallback'] || $image['cutout'] ) {
+		// A product shot (or any cutout with a transparent background) reads better next to the copy
+		// than cropped behind it.
 		$layout = $image['id'] ? 'split' : 'cover'; // No products yet: gradient only.
 	}
 }
@@ -41,6 +42,9 @@ if ( 'image' === $mode ) {
 $classes = array( 'hero', 'hero--home', 'hero--' . $mode );
 if ( 'image' === $mode ) {
 	$classes[] = 'hero--' . $layout;
+	if ( $image['cutout'] ) {
+		$classes[] = 'hero--cutout'; // Transparent picture: palette gradient behind it, like the character hero.
+	}
 } elseif ( $first && $first['palette']['light'] ) {
 	$classes[] = 'is-light';
 }
@@ -84,7 +88,11 @@ $webni_words = function ( $text, $delay ) {
 				<a class="btn btn--ghost btn--lg" href="<?php echo esc_url( $cta2_url ? $cta2_url : webni_shop_url() ); ?>"><?php echo esc_html( webni_option( 'hero_cta2' ) ); ?></a>
 			</div>
 		</div>
-		<?php if ( 'image' === $mode && 'split' === $layout ) : ?>
+		<?php if ( 'image' === $mode && 'split' === $layout && $image['cutout'] ) : ?>
+			<div class="hero__stage hero__stage--cutout">
+				<?php echo wp_get_attachment_image( $image['id'], 'webni-hero', false, array( 'class' => 'pack pack--hero pack--float', 'loading' => 'eager', 'fetchpriority' => 'high', 'decoding' => 'async' ) ); ?>
+			</div>
+		<?php elseif ( 'image' === $mode && 'split' === $layout ) : ?>
 			<div class="hero__stage hero__stage--image">
 				<?php echo webni_hero_picture( $image['id'], $pos, '(max-width: 900px) 100vw, 50vw' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>

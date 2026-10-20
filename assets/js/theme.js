@@ -27,8 +27,8 @@
     opts = opts || {};
     var src = p.images && p.images[kind];
     if (!src) { return ''; }
-    var alt = kind === 'bottle' ? p.name : p.name;
-    return '<img class="pack pack--' + kind + (opts.float ? ' pack--float' : '') + '" src="' + esc(src) + '" alt="' + esc(alt) + '" loading="' + (opts.eager ? 'eager' : 'lazy') + '" decoding="async">';
+    var photo = p.cutout && p.cutout[kind] === false; // rectangular photo: framed, not floating
+    return '<img class="pack pack--' + kind + (opts.float && !photo ? ' pack--float' : '') + (photo ? ' pack--photo' : '') + '" src="' + esc(src) + '" alt="' + esc(p.name) + '" loading="' + (opts.eager ? 'eager' : 'lazy') + '" decoding="async">';
   }
   window.BPDL_util = { esc: esc, sprintf: sprintf, packHTML: packHTML, byKey: byKey };
 

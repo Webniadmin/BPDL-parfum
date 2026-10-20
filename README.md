@@ -3,7 +3,7 @@
 Custom WordPress + WooCommerce theme for **BP|DL Parfum** — eight AI-written perfume recipes, one dark "character" world, Serbian (Latin) storefront.
 
 - Theme slug / text domain: `webni-custom-version-1`
-- Version: 1.1.0
+- Version: 1.1.1
 - Requires: WordPress 6.4+, PHP 8.1+, WooCommerce 8.0+ (tested with 10.1)
 - Forms: Gravity Forms (optional at install time, required for newsletter / quiz e-mail / contact)
 - No page builders, no CDN fonts, no third-party requests from the theme.
@@ -76,6 +76,8 @@ Perfumes are ordinary WooCommerce simple products. Price, sale price, stock, fea
 
 character, tagline, alternative tagline, pronunciation, five words, "Ko ga nosi", occasion, season, day/night (filter), top/heart/base notes, zodiac signs, two "Probaj i" products with reasons, palette (dark, mid, light/glow, accent, light-palette switch), name typography (serif / script / caps), hero image (bottle on tube), bottle image, visual world sentence, quiz result description, quiz key.
 
+**Pictures.** The product's featured image is the card. *Hero slika* (product page hero, animated home hero, the home fallback picture) and *Mala slika* (quiz result, "Probaj i", Par set band) default to it; the demo cutouts linked by the import are replaced automatically as soon as the featured image is changed to a picture of your own, so uploading new renders in WooCommerce is enough. A picture with a transparent background floats on the character's palette; a rectangular photo is framed and cropped (4:5) with soft edges instead. The decision is made once per image (corner-pixel alpha, cached as `_webni_cutout` attachment meta; filter `webni_image_is_cutout`).
+
 A product appears in the home collection, the hero strip and the quiz only when *Karakter* is filled. Order = product **menu order** (Products → Sorting). The quiz results reference products by *quiz key* (defaults to the slug): `terros, secondo, luna, arden, ravon, orren, lemorae, deuxieme`. The zodiac table derives "for him / for her" from the signs ticked on each product and its audience category.
 
 Home rails (Istaknuti = featured products, Novo, Najprodavaniji, Akcije = on sale, Preporučeni = hand-picked IDs) are switched on/off in **Customize → Kolekcija i sekcije sa proizvodima**.
@@ -118,6 +120,8 @@ Theme strings use the `webni-custom-version-1` domain (`languages/webni-custom-v
 - Card payments: install and configure the bank's plugin; no theme change is needed.
 
 ## Changelog
+
+**1.1.1** — New product pictures uploaded in WooCommerce are now used everywhere (product hero, home hero, quiz result, "Probaj i", Par set band) instead of the demo cutouts the import linked; pictures with a transparent background float on the palette, photos are framed and cropped. Meta box image fields relabelled.
 
 **1.1.0** — Home hero can be one large static picture (default; Customizer: image, optional phone image, cover/split layout, crop focus) instead of the WebGL animation, which stays available as *Animacija*; `mist.js` is no longer loaded on the home page in image mode. New Par set band below the home collection and on the product pages of the two perfumes in the set, with AJAX add-to-cart; Secondo/Deuxième cross-sell the set in the cart. Demo import is now non-destructive (existing products keep their data and images; only empty fields are filled). Fixed: AJAX "U korpu" buttons were empty on the home collection and rails.
 

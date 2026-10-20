@@ -40,6 +40,7 @@ Full product documentation: `README.md`. Staging: the client's `*-dev` subdomain
 - Product cards carry `data-cat` (M/Ž/U/'') and `data-time` for the client-side filters.
 - WooCommerce's loop add-to-cart reads the global `$product`; outside the shop loop use `webni_add_to_cart_button()` (sets and restores it).
 - The Par set's two perfumes are its cross-sell IDs (`webni_pair_members()`); the demo import must stay non-destructive (fill empty fields only, merge cross-sells).
+- Images: `webni_perfume()` swaps demo cutouts (`_webni_demo_image` meta) for the shop's own featured image; `webni_image_is_cutout()` decides float (transparent) vs framed photo (`.pack--photo`), cached in `_webni_cutout`. `webni_perfume_image()` / JS `packHTML()` add the class — never hardcode `pack--photo`.
 
 ## Commands
 ```bash
