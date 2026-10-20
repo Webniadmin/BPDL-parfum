@@ -1,0 +1,15 @@
+# Files that stay out of the distributable theme zip (npm run build → git archive)
+.gitignore        export-ignore
+.gitattributes    export-ignore
+.wp-env.json      export-ignore
+CLAUDE.md         export-ignore
+package.json      export-ignore
+package-lock.json export-ignore
+bin/              export-ignore
+.github/          export-ignore
+
+# normalise line endings
+* text=auto eol=lf
+*.woff2 binary
+*.webp binary
+*.png binary

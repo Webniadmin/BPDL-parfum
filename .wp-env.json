@@ -1,0 +1,16 @@
+{
+  "phpVersion": "8.3",
+  "plugins": [
+    "https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"
+  ],
+  "themes": [ "." ],
+  "config": {
+    "WP_DEBUG": true,
+    "WP_DEBUG_LOG": true,
+    "WP_DEBUG_DISPLAY": false,
+    "SCRIPT_DEBUG": true
+  },
+  "lifecycleScripts": {
+    "afterStart": "wp-env run cli wp theme activate webni-custom-version-1 && wp-env run cli wp plugin activate woocommerce"
+  }
+}

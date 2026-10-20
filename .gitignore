@@ -1,0 +1,16 @@
+# dependencies & build output
+node_modules/
+dist/
+*.zip
+
+# local environment
+.wp-env.override.json
+.env
+*.log
+
+# editors / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

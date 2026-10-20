@@ -1,0 +1,1033 @@
+# Copyright (C) 2026 Webni
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Webni Custom Version 1 Theme 1.0.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/webni-custom-version-1\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-06T08:21:58+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: webni-custom-version-1\n"
+
+#. Theme Name of the theme
+#: style.css
+msgid "Webni Custom Version 1 Theme"
+msgstr ""
+
+#. Theme URI of the theme
+#. Author URI of the theme
+#: style.css
+msgid "https://webni.me"
+msgstr ""
+
+#. Description of the theme
+#: style.css
+msgid "Custom WordPress + WooCommerce theme for BP|DL Parfum. Serbian (Latin) storefront, WooCommerce-driven products, Gravity Forms for forms."
+msgstr ""
+
+#. Author of the theme
+#: style.css
+msgid "Webni"
+msgstr ""
+
+#: 404.php:15
+msgid "Ovaj miris ne postoji."
+msgstr ""
+
+#: 404.php:16
+msgid "Stranica je premeštena ili nikad nije postojala. Osam karaktera i dalje čeka."
+msgstr ""
+
+#: 404.php:18
+#: inc/woocommerce.php:90
+#: template-parts/home/gift.php:51
+#: template-parts/home/gift.php:64
+msgid "Pogledaj parfeme"
+msgstr ""
+
+#: 404.php:20
+#: inc/woocommerce.php:234
+msgid "Početna"
+msgstr ""
+
+#: archive.php:13
+#: index.php:15
+msgid "Dnevnik"
+msgstr ""
+
+#: archive.php:23
+#: inc/woocommerce.php:187
+#: index.php:25
+#: search.php:27
+msgid "← Prethodna"
+msgstr ""
+
+#: archive.php:23
+#: inc/woocommerce.php:188
+#: index.php:25
+#: search.php:27
+msgid "Sledeća →"
+msgstr ""
+
+#: archive.php:23
+#: index.php:25
+#: search.php:27
+msgid "Strane"
+msgstr ""
+
+#: archive.php:25
+#: index.php:27
+msgid "Još nema tekstova."
+msgstr ""
+
+#. translators: %s number of comments
+#: comments.php:20
+msgid "%s komentar"
+msgid_plural "%s komentara"
+msgstr[0] ""
+msgstr[1] ""
+
+#: comments.php:33
+msgid "← Stariji"
+msgstr ""
+
+#: comments.php:33
+msgid "Noviji →"
+msgstr ""
+
+#: comments.php:37
+msgid "Komentari su zatvoreni."
+msgstr ""
+
+#: comments.php:42
+msgid "Ostavi komentar"
+msgstr ""
+
+#: comments.php:43
+msgid "Odgovori: %s"
+msgstr ""
+
+#: comments.php:44
+msgid "Odustani"
+msgstr ""
+
+#: comments.php:45
+msgid "Pošalji"
+msgstr ""
+
+#: comments.php:47
+msgid "E-mail adresa se ne objavljuje."
+msgstr ""
+
+#: comments.php:48
+msgid "Komentar"
+msgstr ""
+
+#: comments.php:50
+#: inc/woocommerce-strings.php:660
+msgid "Ime"
+msgstr ""
+
+#: comments.php:51
+#: inc/woocommerce.php:389
+msgid "E-mail"
+msgstr ""
+
+#: comments.php:52
+msgid "Zapamti ime i e-mail za sledeći put."
+msgstr ""
+
+#: footer.php:50
+msgid "Sajt"
+msgstr ""
+
+#: footer.php:55
+#: header.php:43
+#: header.php:68
+#: inc/woocommerce.php:216
+#: inc/woocommerce.php:248
+msgid "Parfemi"
+msgstr ""
+
+#: footer.php:55
+#: header.php:45
+#: header.php:69
+#: inc/quiz.php:87
+#: template-parts/product/perfume.php:124
+msgid "Poklon"
+msgstr ""
+
+#: footer.php:60
+msgid "Pomoć"
+msgstr ""
+
+#: footer.php:65
+msgid "Dostava i plaćanje"
+msgstr ""
+
+#: footer.php:65
+msgid "Kontakt"
+msgstr ""
+
+#: footer.php:70
+msgid "Pravno"
+msgstr ""
+
+#: footer.php:75
+msgid "Uslovi kupovine"
+msgstr ""
+
+#: footer.php:75
+msgid "Privatnost i kolačići"
+msgstr ""
+
+#: footer.php:98
+msgid "Sajt: Webni"
+msgstr ""
+
+#: header.php:26
+msgid "Pređi na sadržaj"
+msgstr ""
+
+#: header.php:38
+#: inc/theme-setup.php:31
+msgid "Glavna navigacija"
+msgstr ""
+
+#: header.php:44
+msgid "Zašto 30%"
+msgstr ""
+
+#: header.php:46
+#: header.php:70
+msgid "Priča"
+msgstr ""
+
+#: header.php:53
+#: header.php:77
+#: header.php:82
+#: search.php:15
+#: searchform.php:13
+msgid "Pretraga"
+msgstr ""
+
+#: header.php:54
+#: header.php:75
+#: inc/woocommerce-strings.php:628
+msgid "Moj nalog"
+msgstr ""
+
+#: header.php:56
+#: header.php:76
+#: header.php:103
+#: header.php:106
+msgid "Korpa"
+msgstr ""
+
+#: header.php:58
+#: header.php:63
+msgid "Meni"
+msgstr ""
+
+#: header.php:84
+#: header.php:107
+#: inc/quiz.php:60
+msgid "Zatvori"
+msgstr ""
+
+#: header.php:96
+#: search.php:30
+msgid "Svi parfemi"
+msgstr ""
+
+#: inc/activation.php:348
+msgid "Webni Custom Version 1 Theme is active: pages, Serbian URLs and store defaults are set."
+msgstr ""
+
+#: inc/activation.php:350
+msgid "Open the BP|DL tools (demo products, settings check)."
+msgstr ""
+
+#: inc/demo-import.php:33
+msgid "You are not allowed to do this."
+msgstr ""
+
+#: inc/enqueue.php:96
+msgid "%s je u korpi."
+msgstr ""
+
+#: inc/enqueue.php:97
+#: inc/woocommerce.php:87
+msgid "Vidi korpu"
+msgstr ""
+
+#: inc/enqueue.php:98
+msgid "Kopirano. Nalepi u story ili poruku."
+msgstr ""
+
+#: inc/enqueue.php:99
+#: inc/woocommerce.php:165
+#: template-parts/home/collection.php:25
+msgid "Nema parfema za ovaj izbor."
+msgstr ""
+
+#: inc/quiz.php:21
+msgid "Koji si karakter?"
+msgstr ""
+
+#: inc/quiz.php:22
+msgid "Ne možeš da omirišeš ekran."
+msgstr ""
+
+#: inc/quiz.php:23
+msgid "Osam recepata koje je napisao AI pokrivaju sve što ljudi nose. Pet pitanja, 40 sekundi — i znaš koji je tvoj. Bez pogrešnih odgovora."
+msgstr ""
+
+#: inc/quiz.php:24
+#: inc/quiz.php:77
+msgid "Kreni"
+msgstr ""
+
+#: inc/quiz.php:26
+msgid "Za koga biraš?"
+msgstr ""
+
+#: inc/quiz.php:26
+msgid "Za sebe"
+msgstr ""
+
+#: inc/quiz.php:26
+msgid "Za poklon"
+msgstr ""
+
+#: inc/quiz.php:27
+msgid "Za koga je parfem?"
+msgstr ""
+
+#: inc/quiz.php:27
+#: inc/quiz.php:79
+#: inc/template-tags.php:190
+#: template-parts/content/filters.php:12
+#: template-parts/home/gift.php:31
+msgid "Za njega"
+msgstr ""
+
+#: inc/quiz.php:27
+#: inc/quiz.php:79
+#: inc/template-tags.php:190
+#: template-parts/content/filters.php:13
+#: template-parts/home/gift.php:31
+msgid "Za nju"
+msgstr ""
+
+#: inc/quiz.php:27
+msgid "Svejedno — miris nema pol"
+msgstr ""
+
+#: inc/quiz.php:28
+msgid "Kada ćeš ga najviše nositi?"
+msgstr ""
+
+#: inc/quiz.php:28
+#: inc/quiz.php:82
+msgid "Svaki dan"
+msgstr ""
+
+#: inc/quiz.php:28
+msgid "od jutra do kad zaspim"
+msgstr ""
+
+#: inc/quiz.php:28
+#: inc/quiz.php:82
+msgid "Na poslu"
+msgstr ""
+
+#: inc/quiz.php:28
+msgid "sastanci, kancelarija, lift"
+msgstr ""
+
+#: inc/quiz.php:28
+msgid "Kad izlazim"
+msgstr ""
+
+#: inc/quiz.php:28
+msgid "veče je moje"
+msgstr ""
+
+#: inc/quiz.php:30
+msgid "Kako želiš da mirišeš?"
+msgstr ""
+
+#: inc/quiz.php:30
+msgid "Sveže"
+msgstr ""
+
+#: inc/quiz.php:30
+msgid "kao vazduh posle kiše"
+msgstr ""
+
+#: inc/quiz.php:30
+msgid "Toplo"
+msgstr ""
+
+#: inc/quiz.php:30
+msgid "kao omiljeni džemper"
+msgstr ""
+
+#: inc/quiz.php:31
+msgid "Koliko da se oseti?"
+msgstr ""
+
+#: inc/quiz.php:31
+msgid "Da me kolege osete"
+msgstr ""
+
+#: inc/quiz.php:31
+msgid "čim uđem"
+msgstr ""
+
+#: inc/quiz.php:31
+msgid "Prijatno"
+msgstr ""
+
+#: inc/quiz.php:31
+msgid "samo kad priđu"
+msgstr ""
+
+#: inc/quiz.php:32
+msgid "Kakvo je veče?"
+msgstr ""
+
+#: inc/quiz.php:32
+msgid "Večera i razgovor"
+msgstr ""
+
+#: inc/quiz.php:32
+msgid "do kasno"
+msgstr ""
+
+#: inc/quiz.php:32
+msgid "Klub"
+msgstr ""
+
+#: inc/quiz.php:32
+msgid "do jutra"
+msgstr ""
+
+#: inc/quiz.php:34
+msgid "Šta te najbolje opisuje?"
+msgstr ""
+
+#: inc/quiz.php:34
+#: inc/quiz.php:81
+msgid "Priroda i tišina"
+msgstr ""
+
+#: inc/quiz.php:34
+#: inc/quiz.php:81
+msgid "Grad i brzina"
+msgstr ""
+
+#: inc/quiz.php:34
+#: inc/quiz.php:81
+msgid "Klasika i red"
+msgstr ""
+
+#: inc/quiz.php:34
+#: inc/quiz.php:81
+msgid "Lepe stvari i smeh"
+msgstr ""
+
+#: inc/quiz.php:36
+msgid "Gde da pošaljemo tvoj karakter?"
+msgstr ""
+
+#: inc/quiz.php:37
+msgid "Da ga ne zaboraviš — i da ti prvi stigne."
+msgstr ""
+
+#: inc/quiz.php:38
+msgid "Preskoči, samo mi pokaži"
+msgstr ""
+
+#: inc/quiz.php:41
+msgid "Svaki dan, sveže: Terros je jutro koje traje do večeri."
+msgstr ""
+
+#: inc/quiz.php:41
+msgid "Svaki dan, sveže: Lemorae je sunce koje nosiš sa sobom."
+msgstr ""
+
+#: inc/quiz.php:42
+msgid "Svaki dan, toplo: Arden je džemper koji ti stoji i u kancelariji."
+msgstr ""
+
+#: inc/quiz.php:42
+msgid "Svaki dan, toplo: Deuxième je bela košulja među parfemima, uvek prikladan, nikad dosadan."
+msgstr ""
+
+#: inc/quiz.php:43
+msgid "Posao, ali da se oseti: Arden je za sastanke, ne za lift."
+msgstr ""
+
+#: inc/quiz.php:43
+msgid "Posao, ali da se oseti: Deuxième uđe pre tebe i ostane posle sastanka."
+msgstr ""
+
+#: inc/quiz.php:44
+msgid "Posao, diskretno: Orren se oseti tek kad ti neko priđe — i onda se pamti."
+msgstr ""
+
+#: inc/quiz.php:44
+msgid "Posao, diskretno: Lemorae je svežina koju kolege primete tek kad priđu."
+msgstr ""
+
+#: inc/quiz.php:45
+msgid "Večera i razgovor: Ravon ne diže glas, ali ostane na jakni i sutradan."
+msgstr ""
+
+#: inc/quiz.php:45
+msgid "Večera i razgovor: Deuxième je elegancija koja se ne trudi."
+msgstr ""
+
+#: inc/quiz.php:46
+msgid "Klub do jutra: Secondo je jedini koji izdrži do kraja noći."
+msgstr ""
+
+#: inc/quiz.php:46
+msgid "Klub do jutra: Luna sija tek kad padne noć."
+msgstr ""
+
+#: inc/quiz.php:46
+msgid "Klub do jutra: Ravon ne juri — čeka, i ostane duže od svih."
+msgstr ""
+
+#: inc/quiz.php:50
+msgid "Karakter %1$s od %2$s"
+msgstr ""
+
+#: inc/quiz.php:51
+msgid "Ti si %s."
+msgstr ""
+
+#: inc/quiz.php:52
+msgid "Vidi %s"
+msgstr ""
+
+#: inc/quiz.php:53
+#: template-parts/product/perfume.php:50
+msgid "Probaj u discovery setu"
+msgstr ""
+
+#: inc/quiz.php:54
+msgid "Nije to? Probaj"
+msgstr ""
+
+#: inc/quiz.php:55
+msgid "Ja sam %s. Koji si ti?"
+msgstr ""
+
+#: inc/quiz.php:56
+msgid "Podeli"
+msgstr ""
+
+#: inc/quiz.php:57
+msgid "Uradi ponovo"
+msgstr ""
+
+#: inc/quiz.php:58
+msgid "Vrati se"
+msgstr ""
+
+#: inc/quiz.php:59
+msgid "%1$s od %2$s"
+msgstr ""
+
+#. translators: %s character
+#: inc/quiz.php:74
+#: template-parts/product/perfume.php:128
+msgid "Pronađi njihov miris"
+msgstr ""
+
+#: inc/quiz.php:75
+msgid "Ne znaš šta voli? Znaš kad je rođen."
+msgstr ""
+
+#: inc/quiz.php:76
+msgid "Pet pitanja o osobi kojoj poklanjaš. Ako ni to nije dovoljno, uvek postoji discovery set."
+msgstr ""
+
+#: inc/quiz.php:79
+msgid "Za koga je poklon?"
+msgstr ""
+
+#: inc/quiz.php:80
+msgid "Znaš li znak?"
+msgstr ""
+
+#: inc/quiz.php:80
+msgid "Ne znam"
+msgstr ""
+
+#: inc/quiz.php:81
+msgid "Kakva je osoba?"
+msgstr ""
+
+#: inc/quiz.php:82
+msgid "Kad će ga nositi?"
+msgstr ""
+
+#: inc/quiz.php:82
+msgid "Kad izlazi"
+msgstr ""
+
+#: inc/quiz.php:83
+msgid "Voli jake mirise?"
+msgstr ""
+
+#: inc/quiz.php:83
+msgid "Da, neka se oseti"
+msgstr ""
+
+#: inc/quiz.php:83
+msgid "Ne, diskretno"
+msgstr ""
+
+#: inc/quiz.php:88
+msgid "Za %1$s, %2$s: %3$s."
+msgstr ""
+
+#: inc/quiz.php:89
+msgid "Za njega: %s."
+msgstr ""
+
+#: inc/quiz.php:90
+msgid "Za nju: %s."
+msgstr ""
+
+#: inc/quiz.php:91
+msgid "U paketu je kartica karaktera: piše „Ti si %s“, pa poklon ima priču pre nego što se otvori."
+msgstr ""
+
+#: inc/quiz.php:92
+msgid "Pošalji poklon"
+msgstr ""
+
+#: inc/quiz.php:93
+msgid "Nisi siguran? Discovery set."
+msgstr ""
+
+#: inc/quiz.php:94
+msgid "Horoskop je igra. Miris je stvaran."
+msgstr ""
+
+#: inc/template-tags.php:190
+#: template-parts/content/filters.php:14
+msgid "Unisex"
+msgstr ""
+
+#: inc/template-tags.php:383
+#: inc/woocommerce.php:193
+msgid "Akcija"
+msgstr ""
+
+#: inc/template-tags.php:384
+msgid "Rasprodato"
+msgstr ""
+
+#: inc/template-tags.php:468
+msgid "Čeka odobrenje"
+msgstr ""
+
+#: inc/template-tags.php:471
+msgid "Odgovori"
+msgstr ""
+
+#: inc/theme-setup.php:32
+msgid "Futer — Sajt"
+msgstr ""
+
+#: inc/theme-setup.php:33
+msgid "Futer — Pomoć"
+msgstr ""
+
+#: inc/theme-setup.php:34
+msgid "Futer — Pravno"
+msgstr ""
+
+#: inc/theme-setup.php:49
+msgid "Futer — dodatno"
+msgstr ""
+
+#: inc/theme-setup.php:51
+msgid "Prikazuje se u futeru iznad linije sa autorskim pravima (npr. logotipi kartica, sertifikati)."
+msgstr ""
+
+#: inc/woocommerce-slugs.php:262
+msgid "Serbian URLs (/parfemi/, /parfem/…) are switched off because WordPress could not write its rewrite block to .htaccess. The site works with plain URLs in the meantime."
+msgstr ""
+
+#: inc/woocommerce-slugs.php:263
+msgid "Fix: make .htaccess in the site root writable (or paste the block below into it), then open Settings → Permalinks, choose \"Post name\" and save — or use WooCommerce → BP|DL alati → Apply Serbian URLs."
+msgstr ""
+
+#: inc/woocommerce-strings.php:602
+msgid "Podrazumevano"
+msgstr ""
+
+#: inc/woocommerce-strings.php:603
+msgid "Najprodavaniji"
+msgstr ""
+
+#: inc/woocommerce-strings.php:604
+msgid "Po oceni"
+msgstr ""
+
+#: inc/woocommerce-strings.php:605
+msgid "Najnovije"
+msgstr ""
+
+#: inc/woocommerce-strings.php:606
+msgid "Cena: od niže"
+msgstr ""
+
+#: inc/woocommerce-strings.php:607
+msgid "Cena: od više"
+msgstr ""
+
+#: inc/woocommerce-strings.php:608
+msgid "Relevantnost"
+msgstr ""
+
+#: inc/woocommerce-strings.php:629
+msgid "Porudžbine"
+msgstr ""
+
+#: inc/woocommerce-strings.php:630
+msgid "Preuzimanja"
+msgstr ""
+
+#: inc/woocommerce-strings.php:631
+msgid "Adrese"
+msgstr ""
+
+#: inc/woocommerce-strings.php:632
+msgid "Načini plaćanja"
+msgstr ""
+
+#: inc/woocommerce-strings.php:633
+msgid "Podaci naloga"
+msgstr ""
+
+#: inc/woocommerce-strings.php:634
+msgid "Odjava"
+msgstr ""
+
+#: inc/woocommerce-strings.php:661
+msgid "Prezime"
+msgstr ""
+
+#: inc/woocommerce-strings.php:662
+msgid "Firma"
+msgstr ""
+
+#: inc/woocommerce-strings.php:663
+msgid "Država"
+msgstr ""
+
+#: inc/woocommerce-strings.php:664
+msgid "Ulica i broj"
+msgstr ""
+
+#: inc/woocommerce-strings.php:664
+msgid "npr. Bulevar kralja Aleksandra 12"
+msgstr ""
+
+#: inc/woocommerce-strings.php:665
+msgid "Stan, sprat, ulaz"
+msgstr ""
+
+#: inc/woocommerce-strings.php:665
+msgid "nije obavezno"
+msgstr ""
+
+#: inc/woocommerce-strings.php:666
+msgid "Grad"
+msgstr ""
+
+#: inc/woocommerce-strings.php:667
+msgid "Okrug"
+msgstr ""
+
+#: inc/woocommerce-strings.php:668
+msgid "Poštanski broj"
+msgstr ""
+
+#: inc/woocommerce-strings.php:668
+msgid "npr. 11000"
+msgstr ""
+
+#: inc/woocommerce.php:77
+msgid "Ukloni"
+msgstr ""
+
+#: inc/woocommerce.php:86
+msgid "Međuzbir"
+msgstr ""
+
+#: inc/woocommerce.php:87
+msgid "Plaćanje"
+msgstr ""
+
+#: inc/woocommerce.php:89
+msgid "Korpa je prazna."
+msgstr ""
+
+#: inc/woocommerce.php:198
+msgid "U korpu"
+msgstr ""
+
+#. translators: %s product name
+#: inc/woocommerce.php:205
+msgid "Uzmi %s"
+msgstr ""
+
+#. translators: %s product name
+#: inc/woocommerce.php:205
+msgid "Dodaj u korpu"
+msgstr ""
+
+#: inc/woocommerce.php:230
+msgid "Putanja"
+msgstr ""
+
+#: inc/woocommerce.php:349
+msgid "Poruči"
+msgstr ""
+
+#: inc/woocommerce.php:385
+msgid "Telefon"
+msgstr ""
+
+#: inc/woocommerce.php:386
+msgid "za kurira, npr. 06x…"
+msgstr ""
+
+#: inc/woocommerce.php:390
+msgid "za potvrdu porudžbine"
+msgstr ""
+
+#: inc/woocommerce.php:393
+msgid "Napomena"
+msgstr ""
+
+#: inc/woocommerce.php:394
+msgid "Sprat, interfon, kad te ima kod kuće, poruka za poklon…"
+msgstr ""
+
+#: inc/woocommerce.php:397
+msgid "Lozinka za nalog"
+msgstr ""
+
+#: inc/woocommerce.php:398
+msgid "Lozinka"
+msgstr ""
+
+#: inc/woocommerce.php:415
+msgid "Dostava za 1–3 radna dana."
+msgstr ""
+
+#: inc/woocommerce.php:420
+msgid "Hvala. Tvoja porudžbina je primljena — potvrda stiže na e-mail."
+msgstr ""
+
+#: inc/woocommerce.php:441
+#: template-parts/product/simple.php:55
+msgid "Probaj i"
+msgstr ""
+
+#: page.php:19
+msgid "BP|DL Parfum"
+msgstr ""
+
+#. translators: %s search term
+#: search.php:12
+msgid "Rezultati za „%s“"
+msgstr ""
+
+#: search.php:29
+msgid "Ništa nije pronađeno. Probaj drugu reč ili pogledaj parfeme."
+msgstr ""
+
+#: searchform.php:14
+msgid "Pretraži parfeme…"
+msgstr ""
+
+#: searchform.php:16
+msgid "Traži"
+msgstr ""
+
+#: single.php:40
+msgid "Drugi tekstovi"
+msgstr ""
+
+#: single.php:42
+msgid "← Prethodni"
+msgstr ""
+
+#: single.php:45
+msgid "Sledeći →"
+msgstr ""
+
+#: template-parts/content/filters.php:10
+msgid "Filter"
+msgstr ""
+
+#: template-parts/content/filters.php:11
+msgid "Svi"
+msgstr ""
+
+#: template-parts/content/filters.php:15
+msgid "Dan"
+msgstr ""
+
+#: template-parts/content/filters.php:16
+msgid "Noć"
+msgstr ""
+
+#: template-parts/content/post-card.php:21
+msgid "Pročitaj"
+msgstr ""
+
+#: template-parts/home/collection.php:27
+msgid "Parfemi stižu. Učitaj proizvode u WooCommerce-u (ili demo katalog u WooCommerce → BP|DL alati)."
+msgstr ""
+
+#: template-parts/home/gift.php:49
+msgid "Naruči discovery set"
+msgstr ""
+
+#: template-parts/home/gift.php:62
+msgid "Uzmi par"
+msgstr ""
+
+#: template-parts/home/hero.php:60
+msgid "Osam karaktera"
+msgstr ""
+
+#. translators: %s product name
+#: template-parts/home/quality.php:15
+msgid "Većina toaletnih voda ima 8–15%% parfemskog ulja. %s ima 30%%. Tri spreja ujutru i ništa do večeri — zato 50 ml traje duže nego što misliš."
+msgstr ""
+
+#: template-parts/home/quality.php:25
+msgid "Kako radi 30%"
+msgstr ""
+
+#: template-parts/home/rail.php:26
+msgid "Svi parfemi →"
+msgstr ""
+
+#. translators: %s number
+#: template-parts/home/story.php:29
+msgid "Svet %s"
+msgstr ""
+
+#. translators: 1: number, 2: total, 3: character, 4: pronunciation
+#: template-parts/product/perfume.php:30
+msgid "Karakter %1$s od %2$s · %3$s"
+msgstr ""
+
+#. translators: %s pronunciation
+#: template-parts/product/perfume.php:33
+msgid "izgovara se „%s“"
+msgstr ""
+
+#. translators: %s next perfume name
+#: template-parts/product/perfume.php:60
+msgid "Sledeći karakter: %s →"
+msgstr ""
+
+#: template-parts/product/perfume.php:67
+msgid "Ko ga nosi"
+msgstr ""
+
+#: template-parts/product/perfume.php:81
+msgid "Prilika"
+msgstr ""
+
+#: template-parts/product/perfume.php:82
+msgid "Sezona"
+msgstr ""
+
+#: template-parts/product/perfume.php:83
+msgid "Kako traje"
+msgstr ""
+
+#: template-parts/product/perfume.php:93
+msgid "Note"
+msgstr ""
+
+#: template-parts/product/perfume.php:93
+msgid "Kako se otvara."
+msgstr ""
+
+#: template-parts/product/perfume.php:99
+msgid "Prvih 15 minuta"
+msgstr ""
+
+#: template-parts/product/perfume.php:99
+msgid "Vrh"
+msgstr ""
+
+#: template-parts/product/perfume.php:100
+msgid "1–4 sata"
+msgstr ""
+
+#: template-parts/product/perfume.php:100
+msgid "Srce"
+msgstr ""
+
+#: template-parts/product/perfume.php:101
+msgid "Do večeri"
+msgstr ""
+
+#: template-parts/product/perfume.php:101
+msgid "Baza"
+msgstr ""
+
+#. translators: %s zodiac signs
+#: template-parts/product/perfume.php:126
+msgid "Idealan za %s."
+msgstr ""
+
+#. translators: %s zodiac signs
+#: template-parts/product/perfume.php:126
+msgid "Idealan poklon."
+msgstr ""
+
+#. translators: %s character
+#: template-parts/product/perfume.php:127
+msgid "Kartica karaktera je u pakovanju: piše „Ti si %s“, pa poklon ima priču pre nego što se otvori."
+msgstr ""
+
+#: template-parts/product/perfume.php:132
+msgid "Ako ti se dopada, probaj i"
+msgstr ""
+
+#: template-parts/product/perfume.php:151
+msgid "Nije to?"
+msgstr ""
+
+#: template-parts/product/perfume.php:153
+msgid "Pet pitanja, 40 sekundi, i znaš koji si karakter."
+msgstr ""
+
+#: template-parts/product/simple.php:48
+msgid "Opis"
+msgstr ""

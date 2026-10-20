@@ -1,0 +1,121 @@
+# Webni Custom Version 1 Theme
+
+Custom WordPress + WooCommerce theme for **BP|DL Parfum** — eight AI-written perfume recipes, one dark "character" world, Serbian (Latin) storefront.
+
+- Theme slug / text domain: `webni-custom-version-1`
+- Version: 1.0.1
+- Requires: WordPress 6.4+, PHP 8.1+, WooCommerce 8.0+ (tested with 10.1)
+- Forms: Gravity Forms (optional at install time, required for newsletter / quiz e-mail / contact)
+- No page builders, no CDN fonts, no third-party requests from the theme.
+
+---
+
+## 1. Installation
+
+1. **Appearance → Themes → Add New → Upload Theme**, choose `webni-custom-version-1.zip`, install and activate.
+2. Activation runs once and is safe to repeat:
+   - creates the missing pages: *Početna* (front page), *Parfemi* (shop), *Korpa*, *Plaćanje*, *Moj nalog*, *Dnevnik* (blog), *Pomoć*, *O nama*, *Kontakt*, *Uslovi kupovine*, *Politika privatnosti i kolačići*, *Reklamacije i povrat*, *Podaci o trgovcu*;
+   - points WooCommerce to the Serbian pages (the stock English *Shop/Cart/Checkout/My account* pages are set to draft if they were still selected);
+   - applies store defaults (see §4) unless they were applied before;
+   - applies the Serbian URL structure (§3) and flushes rewrite rules;
+   - creates the four menus and assigns them to empty menu locations.
+3. Open **WooCommerce → BP|DL alati** and click **Učitaj demo proizvode** to load the eight perfumes, the Discovery set and the Par set (images included). The tool is idempotent: products are matched by slug and updated, never deleted.
+4. Install Gravity Forms, create the forms (§5) and enter their IDs in **Appearance → Customize → BP|DL Parfum → Newsletter i forme**.
+
+Nothing in the theme hardcodes a domain; it works on `bpdlparfum-dev.webni.me`, on production, or locally.
+
+## 2. What the theme renders
+
+| URL | Template | Notes |
+| --- | --- | --- |
+| `/` | `front-page.php` + `template-parts/home/*` | Hero with WebGL mist cycling the eight characters, marquee, collection (all perfumes + filters), product rails, "Zašto 30%", quiz teaser, gift (zodiac + Discovery/Par set), story + worlds, newsletter. |
+| `/parfemi/` | WooCommerce archive (hooks, `content-product.php`) | Breadcrumb, title + intro, filter chips (client-side), result count, sorting, pagination, AJAX "U korpu" on cards. |
+| `/kategorija-parfema/{slug}/` | same archive | Category name + description. |
+| `/parfem/{slug}/` | `woocommerce/content-single-product.php` | Perfumes (products with character data) get the full landing: hero with mist + add-to-cart, "Ko ga nosi", facts, notes, 30%, gift + "Probaj i", CTA band. Other products (sets) use `template-parts/product/simple.php`. |
+| `/korpa/`, `/placanje/`, `/moj-nalog/…` | WooCommerce shortcodes on the pages, styled by `assets/css/woocommerce.css` | Classic cart/checkout/account templates (hooks, not overrides). |
+| `/pretraga/{term}/?post_type=product` | WooCommerce archive | Header search searches products. |
+| blog / pages / search / 404 | `index.php`, `single.php`, `page.php`, `archive.php`, `search.php`, `404.php` | |
+
+All visitor-facing text is Serbian Latin. Code, comments and this file are English.
+
+## 3. URL structure (Serbian)
+
+Set as WooCommerce/WordPress options on activation (still editable in **Settings → Permalinks** and **WooCommerce → Settings → Advanced**). The theme only writes a value while it still holds the stock English one.
+
+- Permalinks `/%postname%/`, category base `kategorija`, tag base `oznaka`
+- Product `/parfem/{slug}/`, product category `/kategorija-parfema/{slug}/`, product tag `/oznaka-parfema/{slug}/`, attribute base `atribut`
+- Shop page `/parfemi/`, cart `/korpa/`, checkout `/placanje/`, account `/moj-nalog/`
+- Account endpoints: `porudzbine`, `porudzbina`, `preuzimanja`, `adrese`, `podaci-naloga`, `nacini-placanja`, `zaboravljena-lozinka`, `odjava`
+- Checkout endpoints: `porudzbina-primljena`, `placanje-porudzbine`
+- Core bases: pagination `strana`, search `pretraga`, author `autor`
+
+`WooCommerce → BP|DL alati → Apply Serbian URLs` re-applies everything and flushes rewrite rules.
+
+## 4. Store defaults applied once
+
+RSD shown as `5.900 RSD` (0 decimals, `.` thousands separator), Serbia as the only selling/shipping country, taxes off (prices include PDV), cash on delivery enabled (*Plaćanje pouzećem*), one shipping zone *Srbija* with *Kurirska dostava* 390 RSD and *Besplatna dostava* above 9.000 RSD (paid rates are hidden when free shipping applies), guest checkout on, account registration on, reviews off, phone required at checkout, Serbian e-mail subjects/headings, Serbian privacy/terms texts, numeric date format `j. n. Y.`, store visibility "live", classic product editor (needed for the character meta box).
+
+Card payments: leave the gateway work to the bank's plugin (Raiffeisen) later — the theme styles whatever `woocommerce_checkout_payment` renders.
+
+## 5. Gravity Forms
+
+The theme never renders its own form handlers. Form IDs are entered in the Customizer (**BP|DL Parfum → Newsletter i forme**):
+
+| Setting | Where it renders | Suggested fields |
+| --- | --- | --- |
+| Newsletter form ID | Home newsletter section; footer on other pages | E-mail (required) |
+| Quiz e-mail form ID (optional) | Last step of the quiz "Koji si karakter?" | E-mail; a **Hidden** field with CSS class `webni-quiz-result` receives the result ("Noćna muza (Luna)"). Enable AJAX in the form settings. Without an ID the quiz skips the e-mail step. |
+| Contact form ID | `[webni_contact_form]` shortcode (used on the *Kontakt* page) | Name, e-mail, message |
+
+If Gravity Forms is inactive or an ID is wrong, visitors see nothing; administrators see a dashed note explaining what to set. The `gf_` CSS classes get dark-theme styling automatically.
+
+## 6. Products: the "BP|DL karakter" meta box
+
+Perfumes are ordinary WooCommerce simple products. Price, sale price, stock, featured flag, images, categories (*Za njega*, *Za nju*, *Unisex*, *Setovi*), cross-sells and descriptions are managed by WooCommerce. The meta box adds brand data (saved as `_bpdl_*` post meta):
+
+character, tagline, alternative tagline, pronunciation, five words, "Ko ga nosi", occasion, season, day/night (filter), top/heart/base notes, zodiac signs, two "Probaj i" products with reasons, palette (dark, mid, light/glow, accent, light-palette switch), name typography (serif / script / caps), hero image (bottle on tube), bottle image, visual world sentence, quiz result description, quiz key.
+
+A product appears in the home collection, the hero strip and the quiz only when *Karakter* is filled. Order = product **menu order** (Products → Sorting). The quiz results reference products by *quiz key* (defaults to the slug): `terros, secondo, luna, arden, ravon, orren, lemorae, deuxieme`. The zodiac table derives "for him / for her" from the signs ticked on each product and its audience category.
+
+Home rails (Istaknuti = featured products, Novo, Najprodavaniji, Akcije = on sale, Preporučeni = hand-picked IDs) are switched on/off in **Customize → Kolekcija i sekcije sa proizvodima**.
+
+## 7. Customizer (Appearance → Customize → BP|DL Parfum)
+
+Hero, Kolekcija i sekcije sa proizvodima, Zašto 30%, Quiz, Poklon (incl. Discovery set / Par set product pickers), Priča, Newsletter i forme (Gravity Forms IDs), Prodavnica i stranica proizvoda (shop title/intro, delivery line, free-shipping text, product texts), Futer i kontakt (tagline, contact e-mail/phone/address, Instagram/TikTok/Facebook/YouTube, payment line, copyright with `{year}`). Logo: **Site Identity → Logo** (text wordmark is used when no logo is set). Menus: *Glavna navigacija*, *Futer — Sajt*, *Futer — Pomoć*, *Futer — Pravno*. One optional widget area: *Futer — dodatno*.
+
+## 8. Serbian storefront strings
+
+The official WooCommerce `sr_RS` pack is Cyrillic, so the site locale stays `en_US` and `inc/woocommerce-strings.php` translates the `woocommerce` text domain on the fly (front end, AJAX, REST, cron and while customer e-mails render — never in wp-admin). Add or change a string with the `webni_wc_strings` filter:
+
+```php
+add_filter( 'webni_wc_strings', function ( $table ) {
+	$table['Add to cart'] = 'Dodaj u korpu';
+	return $table;
+} );
+```
+
+Theme strings use the `webni-custom-version-1` domain (`languages/webni-custom-version-1.pot`).
+
+## 9. Developer notes
+
+- Everything is wired from `functions.php` → `inc/*.php`. Hooks are preferred over template overrides; the only WooCommerce overrides are `woocommerce/content-product.php` (card) and `woocommerce/content-single-product.php` (product layout).
+- Assets: `assets/css/fonts.css` (self-hosted Bodoni Moda, Jost, Alex Brush), `theme.css`, `woocommerce.css` (shop pages only); `assets/js/theme.js` (navigation, overlays, quiz, filters, WooCommerce feedback), `mist.js` (WebGL, only where a hero exists), `home.js`, `product.js`, `admin.js`. Scripts are deferred; data reaches JS through `wp_localize_script` (`BPDL`).
+- Display-font dashes/plus signs are hairlines in Bodoni Moda; `webni_text()` / `webni_dashes()` (PHP) and `dash()` (JS) wrap them in `.dash` so they render in the body font. Use `webni_text()` for any dynamic text placed in a heading.
+- Useful filters: `webni_quiz_config`, `webni_gift_config`, `webni_wc_strings`, `webni_wc_permalink_bases`, `webni_wc_endpoint_slugs`, `webni_required_pages`.
+- Security: every option is sanitized in the Customizer, meta box saves check a nonce + `edit_post`, the tools page checks a nonce + `manage_woocommerce`, output is escaped, there is no direct SQL, no credentials and no API keys in the theme.
+- SEO: `title-tag` support, WooCommerce structured data left in place, clean head; works with Yoast / Rank Math without changes.
+- Performance: no WooCommerce stylesheets or block styles, fonts preloaded, WebGL renders at reduced resolution only while visible and stops under `prefers-reduced-motion`, lazy-loaded images with theme image sizes (`webni-card`, `webni-hero`, `webni-thumb`).
+
+## 10. Before launch
+
+- Legal pages are drafts with `[placeholders]` for the company data — have them reviewed.
+- Set the contact data and social links in the Customizer, upload a logo if needed.
+- Create the Gravity Forms and enter their IDs.
+- Replace demo texts/prices as needed; WooCommerce → Settings → Shipping for real courier prices.
+- Card payments: install and configure the bank's plugin; no theme change is needed.
+
+## Changelog
+
+**1.0.1** — Pretty permalinks are now written to `.htaccess` on activation/update (hard flush) and verified; when the file cannot be written the theme falls back to plain URLs and shows an admin notice with the block to paste (a missing block made every `/wp-json/` call 404, which hosting firewalls treat as a scan). Update routine after file replacement. Removed 16 unused images.
+
+**1.0.0** — Initial release: home, shop, product landings, cart, checkout, account, blog/pages, quiz + gift flows, Serbian URLs and strings, Customizer settings, Gravity Forms integration, demo catalogue import.
