@@ -69,7 +69,7 @@ $notes    = $d['notes'];
 			<div class="lead woocommerce-product-details__description"><?php echo wp_kses_post( wpautop( $product->get_description() ) ); ?></div>
 		</div>
 		<div class="reveal hero__stage">
-			<?php echo webni_perfume_image( $d, 'card', array( 'class' => 'pack pack--set' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php echo webni_perfume_image( $d, 'gallery', array( 'class' => 'pack pack--set' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</div>
 	</div>
 </section>

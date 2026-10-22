@@ -76,7 +76,7 @@ Perfumes are ordinary WooCommerce simple products. Price, sale price, stock, fea
 
 character, tagline, alternative tagline, pronunciation, five words, "Ko ga nosi", occasion, season, day/night (filter), top/heart/base notes, zodiac signs, two "Probaj i" products with reasons, palette (dark, mid, light/glow, accent, light-palette switch), name typography (serif / script / caps), hero image (bottle on tube), bottle image, visual world sentence, quiz result description, quiz key.
 
-**Pictures.** The product's featured image is the card. *Hero slika* (product page hero, animated home hero, the home fallback picture) and *Mala slika* (quiz result, "Probaj i", Par set band) default to it; the demo cutouts linked by the import are replaced automatically as soon as the featured image is changed to a picture of your own, so uploading new renders in WooCommerce is enough. A picture with a transparent background floats on the character's palette; a rectangular photo is framed and cropped (4:5) with soft edges instead. The decision is made once per image (corner-pixel alpha, cached as `_webni_cutout` attachment meta; filter `webni_image_is_cutout`).
+**Pictures.** The product's featured image is the card. *Hero slika* (product page hero, animated home hero, the home fallback picture) and *Mala slika* (quiz result, "Probaj i", Par set band) default to it; the demo cutouts linked by the import are replaced automatically as soon as the featured image is changed to a picture of your own, so uploading new renders in WooCommerce is enough. The second section of a perfume page (*Ko ga nosi*) shows the first picture of the WooCommerce **product gallery** (demo pictures from the import and the featured image itself are skipped); without a gallery picture it shows the featured image. A picture with a transparent background floats on the character's palette; a rectangular photo is framed and cropped (4:5) with soft edges instead. The decision is made once per image (corner-pixel alpha, cached as `_webni_cutout` attachment meta; filter `webni_image_is_cutout`).
 
 A product appears in the home collection, the hero strip and the quiz only when *Karakter* is filled. Order = product **menu order** (Products → Sorting). The quiz results reference products by *quiz key* (defaults to the slug): `terros, secondo, luna, arden, ravon, orren, lemorae, deuxieme`. The zodiac table derives "for him / for her" from the signs ticked on each product and its audience category.
 
@@ -121,6 +121,8 @@ Theme strings use the `webni-custom-version-1` domain (`languages/webni-custom-v
 - Card payments: install and configure the bank's plugin; no theme change is needed.
 
 ## Changelog
+
+**1.1.4** — The *Ko ga nosi* section of a perfume page shows the first picture of the WooCommerce product gallery instead of repeating the featured image (demo pictures are skipped; the featured image stays as the fallback).
 
 **1.1.3** — WordPress' sample widgets (Archives, Categories…) are moved out of the *Futer — dodatno* area on activation/update. Pretty-URL check is less strict: any rewrite to `index.php` in `.htaccess` counts (no WordPress markers required) and, when the file has none, the theme asks the server itself with one HEAD request to `/wp-json/` before switching to plain URLs; the admin notice names the expected file path.
 

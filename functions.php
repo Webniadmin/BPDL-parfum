@@ -9,7 +9,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WEBNI_THEME_VERSION', '1.1.3' );
+define( 'WEBNI_THEME_VERSION', '1.1.4' );
 define( 'WEBNI_THEME_DIR', get_template_directory() );
 define( 'WEBNI_THEME_URI', get_template_directory_uri() );
 define( 'WEBNI_TEXT_DOMAIN', 'webni-custom-version-1' );

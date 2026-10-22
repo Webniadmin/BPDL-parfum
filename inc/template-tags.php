@@ -208,6 +208,19 @@ function webni_perfume( $product ) {
 	$hero_id = $hero_id ?: $featured;
 	$bottle  = $bottle ?: $hero_id;
 
+	// First picture of the WooCommerce product gallery, shown in the "Ko ga nosi" section of the
+	// product page. Demo pictures the import put in the gallery (they repeat the hero) and the
+	// featured image itself are skipped; without a gallery picture the section keeps the featured one.
+	$gallery = 0;
+	foreach ( $product->get_gallery_image_ids() as $gid ) {
+		$gid = (int) $gid;
+		if ( $gid && $gid !== $featured && ! webni_is_demo_image( $gid ) && wp_attachment_is_image( $gid ) ) {
+			$gallery = $gid;
+			break;
+		}
+	}
+	$gallery = $gallery ?: $featured;
+
 	return array(
 		'id'        => $id,
 		'key'       => webni_perfume_key( $product ),
@@ -245,10 +258,12 @@ function webni_perfume( $product ) {
 		'image_id'  => $featured,
 		'hero_id'   => $hero_id,
 		'bottle_id' => $bottle,
+		'gallery_id' => $gallery,
 		'cutout'    => array(
-			'card'   => webni_image_is_cutout( $featured ),
-			'hero'   => webni_image_is_cutout( $hero_id ),
-			'bottle' => webni_image_is_cutout( $bottle ),
+			'card'    => webni_image_is_cutout( $featured ),
+			'hero'    => webni_image_is_cutout( $hero_id ),
+			'bottle'  => webni_image_is_cutout( $bottle ),
+			'gallery' => webni_image_is_cutout( $gallery ),
 		),
 		'price'     => $product->get_price_html(),
 		'in_stock'  => $product->is_in_stock(),
@@ -598,12 +613,17 @@ function webni_zodiac_accusative( $signs ) {
  * Hero image markup for a perfume (bottle on the tube).
  *
  * @param array  $d     Perfume data.
- * @param string $kind  hero|bottle|card.
+ * @param string $kind  hero|bottle|card|gallery.
  * @param array  $attrs Extra attributes.
  * @return string
  */
 function webni_perfume_image( $d, $kind = 'hero', $attrs = array() ) {
-	$map  = array( 'hero' => array( $d['hero_id'], 'webni-hero' ), 'bottle' => array( $d['bottle_id'], 'webni-card' ), 'card' => array( $d['image_id'], 'webni-card' ) );
+	$map  = array(
+		'hero'    => array( $d['hero_id'], 'webni-hero' ),
+		'bottle'  => array( $d['bottle_id'], 'webni-card' ),
+		'card'    => array( $d['image_id'], 'webni-card' ),
+		'gallery' => array( $d['gallery_id'], 'webni-card' ),
+	);
 	$pick = $map[ $kind ];
 	if ( ! $pick[0] ) {
 		return '';
