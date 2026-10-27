@@ -201,3 +201,89 @@ function webni_gf_create_forms() {
 	}
 	return $result;
 }
+
+
+/**
+ * Orbital colours for every form that uses the default style: Gravity Forms derives its focus
+ * rings, choice controls and button states from these values (assets/css/forms.css does the rest).
+ *
+ * @param string|array $styles Default styles (JSON string in Gravity Forms 2.7+).
+ * @return string|array
+ */
+function webni_gf_default_styles( $styles ) {
+	$ours = array(
+		'theme'                        => 'orbital',
+		'inputSize'                    => 'lg',
+		'inputBorderRadius'            => '2',
+		'inputBorderColor'             => '#5b5650',
+		'inputBackgroundColor'         => '#14120f',
+		'inputColor'                   => '#efe9df',
+		'inputPrimaryColor'            => '#d4af37',
+		'labelFontSize'                => '12',
+		'labelColor'                   => '#cfc7bb',
+		'descriptionFontSize'          => '13',
+		'descriptionColor'             => '#9a9187',
+		'buttonPrimaryBackgroundColor' => '#efe9df',
+		'buttonPrimaryColor'           => '#111111',
+	);
+	if ( is_array( $styles ) ) {
+		return array_merge( $styles, $ours );
+	}
+	$current = json_decode( (string) $styles, true );
+	return wp_json_encode( array_merge( is_array( $current ) ? $current : array(), $ours ) );
+}
+add_filter( 'gform_default_styles', 'webni_gf_default_styles' );
+
+/**
+ * Serbian (Latin) texts that Gravity Forms shows to visitors (required mark, validation, buttons).
+ * Front end only, like the WooCommerce table.
+ *
+ * @return array
+ */
+function webni_gf_strings() {
+	return array(
+		'(Required)'                                   => '(obavezno)',
+		'Required'                                     => 'Obavezno',
+		'"%s" indicates required fields'               => '„%s“ označava obavezna polja',
+		'This field is required.'                      => 'Ovo polje je obavezno.',
+		'Please enter a valid email address.'          => 'Unesi ispravnu e-mail adresu.',
+		'Please enter a valid phone number.'           => 'Unesi ispravan broj telefona.',
+		'Please enter a valid phone number in the correct format.' => 'Unesi broj telefona u ispravnom formatu.',
+		'Please enter a valid number.'                 => 'Unesi ispravan broj.',
+		'The text entered exceeds the maximum number of characters.' => 'Tekst je duži od dozvoljenog.',
+		'The text entered contains invalid characters.' => 'Tekst sadrži nedozvoljene znakove.',
+		'There was a problem with your submission.'    => 'Poruka nije poslata.',
+		'Please review the fields below.'              => 'Proveri označena polja.',
+		'Please complete the following fields: %s.'    => 'Popuni sledeća polja: %s.',
+		'At least one field must be filled out.'       => 'Popuni bar jedno polje.',
+		'Thanks for contacting us! We will get in touch with you shortly.' => 'Hvala! Javićemo ti se uskoro.',
+		'Submit'                                       => 'Pošalji',
+		'Next'                                         => 'Dalje',
+		'Previous'                                     => 'Nazad',
+		'Email'                                        => 'E-mail',
+		'Enter Email'                                  => 'Unesi e-mail',
+		'Confirm Email'                                => 'Potvrdi e-mail',
+		'Loading...'                                   => 'Učitavanje…',
+		'max characters'                               => 'najviše znakova',
+	);
+}
+
+/**
+ * gettext filter for the "gravityforms" domain on the storefront.
+ *
+ * @param string $translation Translated text.
+ * @param string $text        Original text.
+ * @param string $domain      Text domain.
+ * @return string
+ */
+function webni_gf_gettext( $translation, $text, $domain ) {
+	if ( 'gravityforms' !== $domain || ( is_admin() && ! wp_doing_ajax() ) ) {
+		return $translation;
+	}
+	static $table = null;
+	if ( null === $table ) {
+		$table = webni_gf_strings();
+	}
+	return isset( $table[ $text ] ) ? $table[ $text ] : $translation;
+}
+add_filter( 'gettext', 'webni_gf_gettext', 10, 3 );

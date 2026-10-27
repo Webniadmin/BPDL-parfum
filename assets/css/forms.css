@@ -1,0 +1,188 @@
+/* ==========================================================================
+   Gravity Forms in the BP|DL look (Kontakt, newsletter, quiz e-mail)
+   Gravity Forms 2.7+ renders its "Orbital" theme (white fields, blue button);
+   these rules restyle it on the theme's dark palette. Colours that Orbital
+   derives itself (focus rings, choice controls) come from the
+   gform_default_styles filter in inc/gravity-forms.php.
+   Prefix body.webni so the rules win over Orbital's own selectors.
+   ========================================================================== */
+
+body.webni .gform_wrapper.gform-theme {
+  --webni-field-bg: rgba(239, 233, 223, 0.04);
+  --webni-field-bg-focus: rgba(239, 233, 223, 0.07);
+  font-family: var(--font-body);
+  color: var(--fg);
+}
+body.webni .gform_wrapper.gform-theme .gform_fields { row-gap: 22px; column-gap: 16px; }
+
+/* Labels: small caps-style, quiet; required mark in gold */
+body.webni .gform_wrapper.gform-theme .gfield_label,
+body.webni .gform_wrapper.gform-theme .gform-field-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+  margin-bottom: 10px;
+}
+body.webni .gform_wrapper.gform-theme .gfield_required,
+body.webni .gform_wrapper.gform-theme .gfield_required_text {
+  color: var(--gold);
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: none;
+  font-style: normal;
+  margin-left: 6px;
+}
+body.webni .gform_wrapper.gform-theme .gfield_description { color: var(--muted); font-size: 13px; }
+
+/* Fields */
+body.webni .gform_wrapper.gform-theme input[type="text"],
+body.webni .gform_wrapper.gform-theme input[type="email"],
+body.webni .gform_wrapper.gform-theme input[type="tel"],
+body.webni .gform_wrapper.gform-theme input[type="number"],
+body.webni .gform_wrapper.gform-theme input[type="url"],
+body.webni .gform_wrapper.gform-theme textarea,
+body.webni .gform_wrapper.gform-theme select {
+  width: 100%;
+  min-height: 54px;
+  padding: 14px 18px;
+  font-family: var(--font-body);
+  font-size: 16px; /* 16px keeps iOS from zooming in */
+  font-weight: 300;
+  line-height: 1.4;
+  color: var(--fg);
+  background: var(--webni-field-bg);
+  border: 1px solid var(--line-2);
+  border-radius: 2px;
+  box-shadow: none;
+  transition: border-color .25s, background-color .25s, box-shadow .25s;
+}
+body.webni .gform_wrapper.gform-theme textarea { min-height: 170px; resize: vertical; }
+body.webni .gform_wrapper.gform-theme input::placeholder,
+body.webni .gform_wrapper.gform-theme textarea::placeholder { color: var(--muted); opacity: 1; }
+body.webni .gform_wrapper.gform-theme input:hover,
+body.webni .gform_wrapper.gform-theme textarea:hover { border-color: rgba(239, 233, 223, 0.45); }
+body.webni .gform_wrapper.gform-theme input:focus,
+body.webni .gform_wrapper.gform-theme textarea:focus,
+body.webni .gform_wrapper.gform-theme select:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: var(--webni-field-bg-focus);
+  box-shadow: 0 0 0 3px var(--gold-dim);
+}
+/* Browser autofill would paint the field white */
+body.webni .gform_wrapper.gform-theme input:-webkit-autofill {
+  -webkit-text-fill-color: var(--fg);
+  box-shadow: 0 0 0 1000px var(--bg-3) inset;
+  caret-color: var(--fg);
+}
+
+/* Submit: same pill as the theme's solid buttons */
+body.webni .gform_wrapper.gform-theme .gform_footer,
+body.webni .gform_wrapper.gform-theme .gform_page_footer { margin-top: 28px; padding: 0; }
+body.webni .gform_wrapper.gform-theme .gform_footer .gform_button,
+body.webni .gform_wrapper.gform-theme .gform_footer input[type="submit"],
+body.webni .gform_wrapper.gform-theme .gform_footer button[type="submit"],
+body.webni .gform_wrapper.gform-theme .gform_page_footer .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 0 36px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: #111;
+  background: var(--fg);
+  border: 1px solid var(--fg);
+  border-radius: 999px;
+  box-shadow: none;
+  cursor: pointer;
+  transition: background-color .3s, border-color .3s, color .3s;
+  /* Orbital paints its buttons from these local variables. */
+  --gf-local-bg-color: var(--fg);
+  --gf-local-color: #111;
+  --gf-local-border-color: var(--fg);
+  --gf-local-radius: 999px;
+  --gf-local-shadow: none;
+}
+body.webni .gform_wrapper.gform-theme .gform_footer .gform_button:hover,
+body.webni .gform_wrapper.gform-theme .gform_footer input[type="submit"]:hover,
+body.webni .gform_wrapper.gform-theme .gform_footer button[type="submit"]:hover {
+  background: var(--gold-2);
+  border-color: var(--gold-2);
+  color: #111;
+  --gf-local-bg-color: var(--gold-2);
+  --gf-local-border-color: var(--gold-2);
+  --gf-local-color: #111;
+}
+body.webni .gform_wrapper.gform-theme .gform_footer .gform_button:focus-visible,
+body.webni .gform_wrapper.gform-theme .gform_footer button[type="submit"]:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+body.webni .gform_wrapper.gform-theme .gform-loader,
+body.webni .gform_wrapper.gform-theme .gform_ajax_spinner { margin-left: 14px; }
+
+/* Errors and confirmation */
+body.webni .gform_wrapper.gform-theme .gform_validation_errors {
+  background: rgba(224, 122, 106, 0.08);
+  border: 1px solid var(--danger);
+  border-radius: 2px;
+  box-shadow: none;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+}
+body.webni .gform_wrapper.gform-theme .gform_validation_errors .gform_submission_error {
+  color: var(--danger);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+body.webni .gform_wrapper.gform-theme .gform_validation_errors .gform-icon { display: none; }
+body.webni .gform_wrapper.gform-theme .gfield_error input,
+body.webni .gform_wrapper.gform-theme .gfield_error textarea { border-color: var(--danger); }
+body.webni .gform_wrapper.gform-theme .gfield_validation_message,
+body.webni .gform_wrapper.gform-theme .validation_message {
+  background: none;
+  border: 0;
+  padding: 6px 0 0;
+  color: var(--danger);
+  font-size: 13px;
+}
+body.webni .gform_wrapper.gform-theme .gfield_error .gfield_label { color: var(--fg-2); }
+body.webni .gform_confirmation_message {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.4vw, 28px);
+  line-height: 1.3;
+  color: var(--gold-2);
+  padding: 24px 0;
+}
+
+/* Kontakt page: comfortable width; name + e-mail side by side on wide screens */
+body.webni .entry-content .gform_wrapper.gform-theme { max-width: 680px; margin: 8px 0 40px; }
+
+/* Newsletter: e-mail and button on one line */
+body.webni .news-form .gform_wrapper.gform-theme form { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 10px; }
+body.webni .news-form .gform_wrapper.gform-theme .gform-body { flex: 1 1 300px; min-width: 0; }
+body.webni .news-form .gform_wrapper.gform-theme .gform_footer { margin: 0; flex: 0 0 auto; }
+body.webni .news-form .gform_wrapper.gform-theme .gform_footer .gform_button,
+body.webni .news-form .gform_wrapper.gform-theme .gform_footer button[type="submit"] { min-height: 54px; }
+body.webni .news-form .gform_wrapper.gform-theme .gfield_label {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* Quiz e-mail step: compact */
+body.webni .quiz__email .gform_wrapper.gform-theme .gform_footer { margin-top: 18px; }
+
+@media (max-width: 560px) {
+  body.webni .gform_wrapper.gform-theme .gform_footer .gform_button,
+  body.webni .gform_wrapper.gform-theme .gform_footer button[type="submit"] { width: 100%; }
+  body.webni .news-form .gform_wrapper.gform-theme .gform_footer { flex: 1 1 100%; }
+}

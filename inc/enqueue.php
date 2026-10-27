@@ -27,6 +27,10 @@ function webni_enqueue_assets() {
 
 	wp_enqueue_style( 'webni-fonts', WEBNI_THEME_URI . '/assets/css/fonts.css', array(), $v );
 	wp_enqueue_style( 'webni-theme', WEBNI_THEME_URI . '/assets/css/theme.css', array( 'webni-fonts' ), $v );
+	if ( function_exists( 'webni_gf_active' ) && webni_gf_active() ) {
+		// Newsletter (footer) and quiz e-mail (modal) are on every page, so the form styles are too.
+		wp_enqueue_style( 'webni-forms', WEBNI_THEME_URI . '/assets/css/forms.css', array( 'webni-theme' ), $v );
+	}
 
 	if ( webni_is_shop_page() ) {
 		wp_enqueue_style( 'webni-woocommerce', WEBNI_THEME_URI . '/assets/css/woocommerce.css', array( 'webni-theme' ), $v );
