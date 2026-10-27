@@ -321,6 +321,11 @@ function webni_maybe_upgrade() {
 		webni_clear_stock_widgets();
 		update_option( 'webni_widgets_cleaned', 1 );
 	}
+	if ( ! get_option( 'webni_merchant_linked' ) && function_exists( 'webni_link_merchant_pages' ) ) {
+		// 1.1.6: the [placeholders] in Kontakt and the legal drafts now read the Customizer data.
+		webni_link_merchant_pages();
+		update_option( 'webni_merchant_linked', 1 );
+	}
 }
 add_action( 'init', 'webni_maybe_upgrade', 98 );
 

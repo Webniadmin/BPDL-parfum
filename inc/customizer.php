@@ -128,6 +128,20 @@ function webni_option_defaults() {
 		'social_facebook'  => '',
 		'social_youtube'   => '',
 		'payment_line'    => 'Visa · Mastercard · Dina · Pouzeće',
+		// Merchant data (inc/merchant.php).
+		'company_name'    => '',
+		'company_address' => '',
+		'company_mb'      => '',
+		'company_pib'     => '',
+		'support_hours'   => '',
+		'return_address'  => '',
+		'privacy_email'   => '',
+		'courier'         => '',
+		'dispatch_cutoff' => '',
+		'court_city'      => '',
+		'bank_name'       => 'Raiffeisen banka a.d. Beograd',
+		'legal_updated'   => '',
+		'payment_logos'   => 0,
 		'copyright'       => '© {year} BP|DL Parfum',
 	);
 }
@@ -156,6 +170,7 @@ function webni_customize_register( $wp_customize ) {
 		'newsletter' => 'Newsletter i forme',
 		'shop'       => 'Prodavnica i stranica proizvoda',
 		'footer'     => 'Futer i kontakt',
+		'merchant'   => 'Podaci o trgovcu',
 	);
 	$i = 0;
 	foreach ( $sections as $id => $title ) {
@@ -296,6 +311,24 @@ function webni_customize_register( $wp_customize ) {
 		array( 'social_youtube', 'footer', 'YouTube URL', 'url' ),
 		array( 'payment_line', 'footer', 'Načini plaćanja (tekst)', 'text' ),
 		array( 'copyright', 'footer', 'Copyright ({year} = tekuća godina)', 'text' ),
+
+		array( 'company_name', 'merchant', 'Pun naziv firme (kao u APR-u)', 'text', array(
+			'description' => 'Ovi podaci se automatski prikazuju na stranicama Kontakt, Podaci o trgovcu, Uslovi kupovine, Politika privatnosti i Reklamacije, i u futeru. Email i telefon se uzimaju iz sekcije „Futer i kontakt“; cena dostave i prag za besplatnu dostavu iz WooCommerce → Podešavanja → Dostava.',
+		) ),
+		array( 'company_address', 'merchant', 'Adresa sedišta', 'text' ),
+		array( 'company_mb', 'merchant', 'Matični broj (MB)', 'text' ),
+		array( 'company_pib', 'merchant', 'PIB', 'text' ),
+		array( 'support_hours', 'merchant', 'Radno vreme podrške (npr. radnim danima 9–17h)', 'text' ),
+		array( 'return_address', 'merchant', 'Adresa za povrat robe (prazno = adresa sedišta)', 'text' ),
+		array( 'privacy_email', 'merchant', 'Email za zaštitu podataka (prazno = kontakt email)', 'email' ),
+		array( 'courier', 'merchant', 'Kurirska služba (npr. D Express)', 'text' ),
+		array( 'dispatch_cutoff', 'merchant', 'Do koliko sati se porudžbina šalje istog dana (npr. 13h)', 'text' ),
+		array( 'court_city', 'merchant', 'Nadležni sud — grad', 'text' ),
+		array( 'bank_name', 'merchant', 'Banka za plaćanje karticama', 'text' ),
+		array( 'legal_updated', 'merchant', 'Datum poslednje izmene uslova', 'text' ),
+		array( 'payment_logos', 'merchant', 'Logotipi kartica i sigurnog plaćanja (slika od banke)', 'image', array(
+			'description' => 'Traka sa logotipima koju dostavlja banka (Visa, Mastercard, Maestro, DinaCard, Visa Secure, Mastercard ID Check, banka). Prikazuje se u futeru i na stranici plaćanja.',
+		) ),
 	);
 
 	$sanitizers = array(

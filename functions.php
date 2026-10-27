@@ -21,6 +21,7 @@ $webni_includes = array(
 	'inc/product-meta.php',      // "BP|DL karakter" product meta box.
 	'inc/customizer.php',        // Theme settings panel.
 	'inc/gravity-forms.php',     // Safe Gravity Forms rendering.
+	'inc/merchant.php',          // Merchant data, [webni_trgovac], payment logos.
 	'inc/quiz.php',              // Quiz configuration (branches, copy).
 	'inc/woocommerce-strings.php', // Serbian (Latin) storefront strings.
 	'inc/woocommerce-slugs.php',   // Serbian URL bases and endpoints.

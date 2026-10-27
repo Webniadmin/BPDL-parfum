@@ -283,8 +283,15 @@
         $$('.webni-quiz-result input, input.webni-quiz-result', form).forEach(function (inp) { inp.value = r.p.character + ' (' + r.p.name + ')'; });
       }
     }
-    var first = panel.querySelector('.answer, .btn, input:not([type=hidden])');
-    if (first) { first.focus({ preventScroll: true }); }
+    // Move focus to the new question (read out by screen readers, Tab reaches the answers next)
+    // rather than to the first answer: focusing an answer painted it gold as if it were already
+    // chosen. Screens without a heading still focus their first control.
+    var head = panel.querySelector('.quiz__q');
+    if (head) { head.setAttribute('tabindex', '-1'); head.focus({ preventScroll: true }); }
+    else {
+      var first = panel.querySelector('.answer, .btn, input:not([type=hidden])');
+      if (first) { first.focus({ preventScroll: true }); }
+    }
   }
   function computeSelf(a) {
     var r = Q.results[(a.when || 'dan') + '-' + (a.q3 || 'sveze')] || Q.results['dan-sveze'];

@@ -115,6 +115,11 @@ function webni_body_classes( $classes ) {
 	}
 	if ( function_exists( 'is_product' ) && is_product() ) {
 		$classes[] = 'page-perfume';
+		// The transparent header sits on the perfume's palette: dark ink on light palettes.
+		$webni_d = webni_perfume( get_queried_object_id() );
+		if ( $webni_d && $webni_d['character'] && ! empty( $webni_d['palette']['light'] ) ) {
+			$classes[] = 'nav-on-light';
+		}
 	}
 	if ( function_exists( 'is_woocommerce' ) && ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() ) ) {
 		$classes[] = 'is-shop';

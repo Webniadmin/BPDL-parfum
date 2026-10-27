@@ -92,6 +92,17 @@ $webni_gf_nl  = (int) webni_option( 'newsletter_gf_id', 0 );
 			<div class="footer__widgets"><?php dynamic_sidebar( 'footer-extra' ); ?></div>
 		<?php endif; ?>
 
+		<?php
+		$webni_logos    = webni_payment_logos( 'footer' );
+		$webni_merchant = webni_merchant_line();
+		?>
+		<?php if ( $webni_logos || $webni_merchant ) : ?>
+			<div class="footer__legal">
+				<?php echo $webni_logos; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from wp_get_attachment_image(). ?>
+				<?php if ( $webni_merchant ) : ?><p class="tiny"><?php echo esc_html( $webni_merchant ); ?></p><?php endif; ?>
+			</div>
+		<?php endif; ?>
+
 		<div class="footer__bottom">
 			<span><?php echo esc_html( $webni_copy ); ?></span>
 			<span><?php echo esc_html( webni_option( 'payment_line' ) ); ?></span>

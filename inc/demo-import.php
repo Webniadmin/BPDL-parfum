@@ -59,6 +59,14 @@ function webni_tools_handle() {
 			update_option( 'webni_flush_rewrite', 1 );
 			$message = sprintf( 'Pages checked: %d created. Menus assigned where empty.', $n );
 			break;
+		case 'gf_forms':
+			$r       = webni_gf_create_forms();
+			$message = $r['error'] && ! $r['created'] ? 'Forms not created: ' . $r['error'] : sprintf( 'Gravity Forms: created %s; already set %s.', $r['created'] ? implode( ', ', $r['created'] ) : 'none', $r['kept'] ? implode( ', ', $r['kept'] ) : 'none' );
+			break;
+		case 'merchant_pages':
+			$n       = webni_link_merchant_pages();
+			$message = sprintf( 'Merchant placeholders linked on %d page(s). Values come from Customize → BP|DL Parfum → Podaci o trgovcu.', $n );
+			break;
 		default:
 			return;
 	}
@@ -90,6 +98,8 @@ function webni_tools_page() {
 		array( 'Newsletter form ID', (int) webni_option( 'newsletter_gf_id', 0 ) ?: 'not set', (bool) webni_option( 'newsletter_gf_id', 0 ) ),
 		array( 'Quiz e-mail form ID', (int) webni_option( 'quiz_gf_id', 0 ) ?: 'not set (optional)', true ),
 		array( 'Contact form ID', (int) webni_option( 'contact_gf_id', 0 ) ?: 'not set', (bool) webni_option( 'contact_gf_id', 0 ) ),
+		array( 'Merchant data (naziv, adresa, PIB, MB)', webni_merchant_line() ? webni_merchant_line() : 'not filled in — legal pages show [placeholders]', '' !== webni_merchant( 'naziv' ) && '' !== webni_merchant( 'pib' ) && '' !== webni_merchant( 'mb' ) ),
+		array( 'Card / 3-D Secure logos', absint( webni_option( 'payment_logos', 0 ) ) ? 'set' : 'not set (required by the bank for card payments)', (bool) absint( webni_option( 'payment_logos', 0 ) ) ),
 		array( 'Perfume products with character data', $perfume_count, $perfume_count >= 8 ),
 		array( 'Shop page', get_option( 'woocommerce_shop_page_id' ) ? get_permalink( (int) get_option( 'woocommerce_shop_page_id' ) ) : 'not set', (bool) get_option( 'woocommerce_shop_page_id' ) ),
 		array( 'Currency', get_option( 'woocommerce_currency' ), 'RSD' === get_option( 'woocommerce_currency' ) ),
@@ -137,6 +147,16 @@ function webni_tools_page() {
 				<h3 style="margin-top:0">Pages &amp; menus</h3>
 				<p>Creates any missing page (Početna, Parfemi, Korpa, Plaćanje, Moj nalog, Pomoć, O nama, Kontakt, legal drafts) and assigns menus to empty locations.</p>
 				<button class="button" name="webni_tool" value="create_pages">Check pages &amp; menus</button>
+			</div>
+			<div class="card" style="max-width:none;padding:16px 20px">
+				<h3 style="margin-top:0">Napravi forme (Gravity Forms)</h3>
+				<p>Creates the Kontakt, Newsletter and Quiz e-mail forms in Gravity Forms (Serbian labels, honeypot, notification to the contact e-mail) and fills in their IDs in the Customizer. Forms that are already set and exist are kept. Requires Gravity Forms to be active.</p>
+				<button class="button" name="webni_tool" value="gf_forms" <?php disabled( ! $gf ); ?>>Napravi forme</button>
+			</div>
+			<div class="card" style="max-width:none;padding:16px 20px">
+				<h3 style="margin-top:0">Poveži podatke o trgovcu</h3>
+				<p>Replaces the [placeholders] still left in Kontakt, Podaci o trgovcu, Uslovi kupovine, Politika privatnosti and Reklamacije with live values from Customize → BP|DL Parfum → Podaci o trgovcu (delivery price and threshold from the WooCommerce shipping zone). Text you already wrote is not touched. Runs once automatically after the 1.1.6 update.</p>
+				<button class="button" name="webni_tool" value="merchant_pages">Poveži podatke</button>
 			</div>
 		</form>
 	</div>
