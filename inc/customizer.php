@@ -142,6 +142,10 @@ function webni_option_defaults() {
 		'bank_name'       => 'Raiffeisen banka a.d. Beograd',
 		'legal_updated'   => '',
 		'payment_logos'   => 0,
+		'company_activity' => '47.91 — Trgovina na malo posredstvom pošte ili preko interneta',
+		'payment_badges_on' => 1,
+		'logo_visa_secure' => 0,
+		'logo_mc_idcheck'  => 0,
 		'copyright'       => '© {year} BP|DL Parfum',
 	);
 }
@@ -326,8 +330,16 @@ function webni_customize_register( $wp_customize ) {
 		array( 'court_city', 'merchant', 'Nadležni sud — grad', 'text' ),
 		array( 'bank_name', 'merchant', 'Banka za plaćanje karticama', 'text' ),
 		array( 'legal_updated', 'merchant', 'Datum poslednje izmene uslova', 'text' ),
-		array( 'payment_logos', 'merchant', 'Logotipi kartica i sigurnog plaćanja (slika od banke)', 'image', array(
-			'description' => 'Traka sa logotipima koju dostavlja banka (Visa, Mastercard, Maestro, DinaCard, Visa Secure, Mastercard ID Check, banka). Prikazuje se u futeru i na stranici plaćanja.',
+		array( 'company_activity', 'merchant', 'Pretežna delatnost (šifra i naziv)', 'text' ),
+		array( 'payment_badges_on', 'merchant', 'Prikaži logotipe banke, kartica i 3-D Secure (futer i plaćanje) — banka to traži za kartično plaćanje', 'checkbox' ),
+		array( 'logo_visa_secure', 'merchant', 'Logo „Visa Secure“ (od banke)', 'image', array(
+			'description' => 'Link ka Visa stranici se dodaje sam. Dok logo nije postavljen, u futeru stoji tekstualni link „Visa Secure“. Širina logotipa 60–155 px.',
+		) ),
+		array( 'logo_mc_idcheck', 'merchant', 'Logo „Mastercard Identity Check“ (od banke)', 'image', array(
+			'description' => 'Link ka Mastercard stranici se dodaje sam. Dok logo nije postavljen, u futeru stoji tekstualni link.',
+		) ),
+		array( 'payment_logos', 'merchant', 'Zamenska traka sa karticama (opciono)', 'image', array(
+			'description' => 'Podrazumevano se koriste logotipi Visa, Mastercard i DinaCard koje je dala Raiffeisen banka (ugrađeni u temu). Postavi sliku samo ako banka pošalje novu traku.',
 		) ),
 	);
 

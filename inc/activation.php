@@ -407,11 +407,12 @@ function webni_maybe_upgrade() {
 	if ( 'besplatna dostava iznad 9.000 RSD' === get_theme_mod( 'webni_free_shipping_text' ) ) {
 		remove_theme_mod( 'webni_free_shipping_text' ); // Back to the default, which reads the zone.
 	}
-	if ( (int) get_option( 'webni_merchant_linked' ) < 2 && function_exists( 'webni_link_merchant_pages' ) ) {
+	if ( (int) get_option( 'webni_merchant_linked' ) < 3 && function_exists( 'webni_link_merchant_pages' ) ) {
 		// 1.1.6: the [placeholders] in Kontakt and the legal drafts now read the Customizer data;
-		// 1.1.9: the delivery sentence on Pomoć reads the shipping zone too.
+		// 1.1.9: the delivery sentence on Pomoć reads the shipping zone too;
+		// 1.2.0: "Podaci o trgovcu" gets the activity and internet address (bank checklist).
 		webni_link_merchant_pages();
-		update_option( 'webni_merchant_linked', 2 );
+		update_option( 'webni_merchant_linked', 3 );
 	}
 }
 add_action( 'init', 'webni_maybe_upgrade', 98 );

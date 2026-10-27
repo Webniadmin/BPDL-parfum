@@ -107,7 +107,8 @@ function webni_tools_page() {
 			return ( null === $f['cost'] ? 'no paid rate' : $f['cost'] . ' RSD' ) . ' · ' . ( null === $f['free'] ? 'no free shipping' : 'free from ' . $f['free'] . ' RSD' );
 		} )(), null !== webni_shipping_figures()['cost'] ),
 		array( 'Merchant data (naziv, adresa, PIB, MB)', webni_merchant_line() ? webni_merchant_line() : 'not filled in — legal pages show [placeholders]', '' !== webni_merchant( 'naziv' ) && '' !== webni_merchant( 'pib' ) && '' !== webni_merchant( 'mb' ) ),
-		array( 'Card / 3-D Secure logos', absint( webni_option( 'payment_logos', 0 ) ) ? 'set' : 'not set (required by the bank for card payments)', (bool) absint( webni_option( 'payment_logos', 0 ) ) ),
+		array( 'Bank & card logos (footer, checkout)', webni_option( 'payment_badges_on', 1 ) ? 'shown (Raiffeisen artwork built into the theme)' : 'hidden in the Customizer', (bool) webni_option( 'payment_badges_on', 1 ) ),
+		array( '3-D Secure logos (Visa Secure, Mastercard ID Check)', ( absint( webni_option( 'logo_visa_secure', 0 ) ) && absint( webni_option( 'logo_mc_idcheck', 0 ) ) ) ? 'uploaded, linked to the pages the bank prescribes' : 'text links only — upload both logos in Customize → Podaci o trgovcu', absint( webni_option( 'logo_visa_secure', 0 ) ) && absint( webni_option( 'logo_mc_idcheck', 0 ) ) ),
 		array( 'Perfume products with character data', $perfume_count, $perfume_count >= 8 ),
 		array( 'Shop page', get_option( 'woocommerce_shop_page_id' ) ? get_permalink( (int) get_option( 'woocommerce_shop_page_id' ) ) : 'not set', (bool) get_option( 'woocommerce_shop_page_id' ) ),
 		array( 'Currency', get_option( 'woocommerce_currency' ), 'RSD' === get_option( 'woocommerce_currency' ) ),

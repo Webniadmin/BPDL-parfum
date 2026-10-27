@@ -24,6 +24,7 @@ function webni_merchant_fields() {
 		'adresa'           => array( 'company_address', 'adresa sedišta' ),
 		'mb'               => array( 'company_mb', 'MB' ),
 		'pib'              => array( 'company_pib', 'PIB' ),
+		'delatnost'        => array( 'company_activity', 'šifra i naziv delatnosti' ),
 		'email'            => array( 'contact_email', 'email' ),
 		'telefon'          => array( 'contact_phone', 'telefon' ),
 		'radno_vreme'      => array( 'support_hours', 'dani i sati' ),
@@ -231,7 +232,16 @@ function webni_link_merchant_placeholders( $content ) {
 	foreach ( webni_merchant_placeholders() as $placeholder => $field ) {
 		$map[ $placeholder ] = '[webni_trgovac polje="' . $field . '"]';
 	}
-	return strtr( (string) $content, $map );
+	$content = strtr( (string) $content, $map );
+	// Bank checklist: activity code and the shop's internet address on "Podaci o trgovcu".
+	$activity = '<strong>Šifra delatnosti:</strong> 47.91 — trgovina na malo posredstvom pošte ili interneta<br>';
+	if ( false !== strpos( $content, $activity ) ) {
+		$content = str_replace( $activity, '<strong>Pretežna delatnost:</strong> [webni_trgovac polje="delatnost"]<br>', $content );
+	}
+	if ( false !== strpos( $content, '<strong>PIB:</strong> [webni_trgovac polje="pib"]<br>' ) && false === strpos( $content, 'polje="domen"' ) ) {
+		$content = str_replace( '<strong>PIB:</strong> [webni_trgovac polje="pib"]<br>', '<strong>PIB:</strong> [webni_trgovac polje="pib"]<br>' . "\n" . '<strong>Internet adresa:</strong> [webni_trgovac polje="domen"]<br>', $content );
+	}
+	return $content;
 }
 
 /**
@@ -302,39 +312,82 @@ function webni_merchant_line() {
 		/* translators: %s company registration number */
 		$parts[] = sprintf( __( 'MB %s', 'webni-custom-version-1' ), webni_merchant( 'mb' ) );
 	}
+	if ( $parts && webni_merchant( 'delatnost' ) ) {
+		/* translators: %s activity code and name */
+		$parts[] = sprintf( __( 'Delatnost %s', 'webni-custom-version-1' ), webni_merchant( 'delatnost' ) );
+	}
 	return implode( ' · ', $parts );
 }
 
 /**
- * Card and 3-D Secure logos supplied by the bank (one image), optionally linked.
+ * Links the bank prescribes for its logos (Raiffeisen "Uputstvo za Internet prodajno mesto").
+ *
+ * @return array
+ */
+function webni_payment_links() {
+	return array(
+		'bank'        => 'https://www.raiffeisenbank.rs/',
+		'visa_secure' => 'https://rs.visa.com/run-your-business/small-business-tools/payment-technology/visa-secure.html',
+		'mc_idcheck'  => 'https://www.mastercard.rs/sr-rs/korisnici/podrska/sigurnost-i-zastita/identity-check.html',
+	);
+}
+
+/**
+ * Payment badges required by the acquiring bank, in three separate groups:
+ * 1. the bank logo, linked to the bank's site;
+ * 2. the accepted card brands (Visa, Mastercard, DinaCard) — the bank's own artwork from
+ *    assets/images/payments, or a replacement strip uploaded in the Customizer;
+ * 3. the 3-D Secure programmes (Visa Secure, Mastercard Identity Check), each linked to the page
+ *    the bank prescribes — logos uploaded in the Customizer, plain text links until then.
+ * Shown in the footer of every page (so also on the home page and every page that mentions
+ * payment) and under the payment methods at checkout. Customizer → Podaci o trgovcu can hide it.
  *
  * @param string $context footer|checkout.
  * @return string HTML.
  */
 function webni_payment_logos( $context = 'footer' ) {
-	$id = absint( webni_option( 'payment_logos', 0 ) );
-	if ( ! $id ) {
+	if ( ! webni_option( 'payment_badges_on', 1 ) ) {
 		return '';
 	}
-	$img = wp_get_attachment_image( $id, 'full', false, array(
-		'class'    => 'payment-logos__img',
-		'loading'  => 'lazy',
-		'decoding' => 'async',
-		'alt'      => __( 'Kartice i sigurno plaćanje', 'webni-custom-version-1' ),
-	) );
-	if ( ! $img ) {
-		return '';
+	$links = webni_payment_links();
+	$dir   = WEBNI_THEME_URI . '/assets/images/payments/';
+	$out   = '<div class="pay-badges pay-badges--' . esc_attr( $context ) . '">';
+
+	// 1. Bank.
+	$out .= '<a class="pay-badges__bank" href="' . esc_url( $links['bank'] ) . '" target="_blank" rel="noopener">'
+		. '<img src="' . esc_url( $dir . 'raiffeisen-bank-dark.svg' ) . '" width="113" height="42" alt="' . esc_attr__( 'Raiffeisen banka', 'webni-custom-version-1' ) . '" loading="lazy" decoding="async">'
+		. '</a>';
+
+	// 2. Card brands.
+	$custom = absint( webni_option( 'payment_logos', 0 ) );
+	$cards  = $custom ? wp_get_attachment_image( $custom, 'full', false, array( 'class' => 'pay-badges__cards-img', 'loading' => 'lazy', 'decoding' => 'async', 'alt' => __( 'Prihvatamo kartice Visa, Mastercard i DinaCard', 'webni-custom-version-1' ) ) ) : '';
+	if ( ! $cards ) {
+		$cards = '<img class="pay-badges__cards-img" src="' . esc_url( $dir . 'card-brands-dark.svg' ) . '" width="214" height="42" alt="' . esc_attr__( 'Prihvatamo kartice Visa, Mastercard i DinaCard', 'webni-custom-version-1' ) . '" loading="lazy" decoding="async">';
 	}
-	return '<div class="payment-logos payment-logos--' . esc_attr( $context ) . '">' . $img . '</div>';
+	$out .= '<span class="pay-badges__cards">' . $cards . '</span>';
+
+	// 3. 3-D Secure, kept apart from the card brands.
+	$secure = array(
+		'visa_secure' => array( 'logo_visa_secure', 'Visa Secure' ),
+		'mc_idcheck'  => array( 'logo_mc_idcheck', 'Mastercard Identity Check' ),
+	);
+	$out .= '<span class="pay-badges__secure">';
+	foreach ( $secure as $key => $s ) {
+		$id   = absint( webni_option( $s[0], 0 ) );
+		$img  = $id ? wp_get_attachment_image( $id, 'full', false, array( 'class' => 'pay-badges__secure-img', 'loading' => 'lazy', 'decoding' => 'async', 'alt' => $s[1] ) ) : '';
+		$out .= '<a class="pay-badges__secure-link' . ( $img ? '' : ' is-text' ) . '" href="' . esc_url( $links[ $key ] ) . '" target="_blank" rel="noopener">' . ( $img ? $img : esc_html( $s[1] ) ) . '</a>';
+	}
+	$out .= '</span></div>';
+	return $out;
 }
 
 /**
- * Logos under the payment methods at checkout.
+ * Bank, card and 3-D Secure logos at checkout, between the terms checkbox and "Poruči".
  */
 function webni_checkout_payment_logos() {
 	echo webni_payment_logos( 'checkout' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from wp_get_attachment_image().
 }
-add_action( 'woocommerce_review_order_after_payment', 'webni_checkout_payment_logos' );
+add_action( 'woocommerce_review_order_before_submit', 'webni_checkout_payment_logos' ); // Right above "Poruči".
 
 /**
  * Free-delivery line under the buy button: the Customizer text with {prag} replaced by the
