@@ -54,7 +54,7 @@ Set as WooCommerce/WordPress options on activation (still editable in **Settings
 
 ## 4. Store defaults applied once
 
-RSD shown as `5.900 RSD` (0 decimals, `.` thousands separator), Serbia as the only selling/shipping country, taxes off (prices include PDV), cash on delivery enabled (*Plaćanje pouzećem*), one shipping zone *Srbija* with *Kurirska dostava* 390 RSD and *Besplatna dostava* above 9.000 RSD (paid rates are hidden when free shipping applies), guest checkout on, account registration on, reviews off, phone required at checkout, Serbian e-mail subjects/headings, Serbian privacy/terms texts, numeric date format `j. n. Y.`, store visibility "live", classic product editor (needed for the character meta box).
+RSD shown as `5.900 RSD` (0 decimals, `.` thousands separator), Serbia as the only selling/shipping country, taxes off (prices include PDV), cash on delivery enabled (*Plaćanje pouzećem*), one shipping zone *Srbija* with *Kurirska dostava* 390 RSD and *Besplatna dostava* from 6.000 RSD (paid rates are hidden when free shipping applies), guest checkout on, account registration on, reviews off, phone required at checkout, Serbian e-mail subjects/headings, Serbian privacy/terms texts, numeric date format `j. n. Y.`, store visibility "live", classic product editor (needed for the character meta box).
 
 Card payments: leave the gateway work to the bank's plugin (Raiffeisen) later — the theme styles whatever `woocommerce_checkout_payment` renders.
 
