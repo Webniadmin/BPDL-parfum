@@ -60,7 +60,7 @@ Card payments: leave the gateway work to the bank's plugin (Raiffeisen) later �
 
 ## 5. Gravity Forms
 
-The theme never renders its own form handlers. Form IDs are entered in the Customizer (**BP|DL Parfum → Newsletter i forme**):
+The theme never renders its own form handlers. Form IDs are entered in the Customizer (**BP|DL Parfum → Newsletter i forme**), or created in one click with **WooCommerce → BP|DL alati → Napravi forme** (Kontakt, Newsletter, Quiz e-mail with Serbian labels; existing forms are kept):
 
 | Setting | Where it renders | Suggested fields |
 | --- | --- | --- |
@@ -121,6 +121,8 @@ Theme strings use the `webni-custom-version-1` domain (`languages/webni-custom-v
 - Card payments: install and configure the bank's plugin; no theme change is needed.
 
 ## Changelog
+
+**1.1.6** — Light perfume palettes (Deuxième, Orren …) get a dark header, breadcrumb and small print on product pages; the custom cursor is two-tone so it shows on every palette; on phones the perfume picture no longer covers the breadcrumb. Quiz: the first answer is no longer painted gold before a choice (focus goes to the question; hover only on hover-capable devices). New Customizer section *Podaci o trgovcu* feeds `[webni_trgovac polje="…"]` — the Kontakt and legal drafts are linked to it once on update (only exact [placeholders] are replaced), delivery price and free-shipping threshold come from the WooCommerce shipping zone, and the footer shows the merchant line and the bank's card/3-D Secure logo strip (also under the payment methods at checkout). BP|DL alati: *Napravi forme* creates the Kontakt/Newsletter/Quiz forms in Gravity Forms and fills in their IDs; without a contact form, visitors see e-mail/phone buttons instead of an empty spot.
 
 **1.1.5** — Home hero (animated mode): the character cycle now shows every perfume's picture. The first picture's `srcset` made the browser ignore every other swap, so the slideshow kept falling back to the first perfume; swaps can no longer flip the two layers twice, all pictures are preloaded, framed/cutout styling follows each perfume, and the hover pause no longer fights taps on touch screens.
 
