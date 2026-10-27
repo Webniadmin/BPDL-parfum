@@ -253,10 +253,31 @@ function webni_default_shipping() {
 	$has_paid = false;
 	$has_free = false;
 	foreach ( $zone->get_shipping_methods( true ) as $method ) {
+		$settings = (array) $method->instance_settings;
+		$changed  = false;
 		if ( 'free_shipping' === $method->id ) {
 			$has_free = true;
+			// The setup wizard's free shipping has no condition, which makes every order free
+			// and hides the courier rate: give it the shop's threshold.
+			if ( empty( $settings['requires'] ) ) {
+				$settings['requires']   = 'min_amount';
+				$settings['min_amount'] = '9000';
+				$changed                = true;
+				$done['added'][]        = 'free shipping now from 9.000 RSD';
+			}
+			if ( empty( $settings['title'] ) || 'Free shipping' === $settings['title'] ) {
+				$settings['title'] = 'Besplatna dostava';
+				$changed           = true;
+			}
 		} elseif ( 'local_pickup' !== $method->id && 'pickup_location' !== $method->id ) {
 			$has_paid = true;
+			if ( 'flat_rate' === $method->id && ( empty( $settings['title'] ) || 'Flat rate' === $settings['title'] ) ) {
+				$settings['title'] = 'Kurirska dostava';
+				$changed           = true;
+			}
+		}
+		if ( $changed ) {
+			update_option( $method->get_instance_option_key(), $settings, 'yes' );
 		}
 	}
 
@@ -361,10 +382,11 @@ function webni_maybe_upgrade() {
 		webni_clear_stock_widgets();
 		update_option( 'webni_widgets_cleaned', 1 );
 	}
-	if ( ! get_option( 'webni_shipping_checked' ) && class_exists( 'WooCommerce' ) ) {
-		// 1.1.7: stores that already had a shipping zone never got the Serbian rates.
+	if ( (int) get_option( 'webni_shipping_checked' ) < 2 && class_exists( 'WooCommerce' ) ) {
+		// 1.1.7: stores that already had a shipping zone never got the Serbian rates;
+		// 1.1.8: an unconditional "Free shipping" from the setup wizard made every order free.
 		webni_default_shipping();
-		update_option( 'webni_shipping_checked', 1 );
+		update_option( 'webni_shipping_checked', 2 );
 	}
 	if ( ! get_option( 'webni_merchant_linked' ) && function_exists( 'webni_link_merchant_pages' ) ) {
 		// 1.1.6: the [placeholders] in Kontakt and the legal drafts now read the Customizer data.

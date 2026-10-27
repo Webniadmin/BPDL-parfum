@@ -473,9 +473,170 @@ function webni_wc_strings() {
 		'Someone has requested a new password for the following account on %s:' => 'Neko je zatražio novu lozinku za nalog na sajtu %s:',
 		'If you didn\'t make this request, just ignore this email. If you\'d like to proceed:' => 'Ako nisi ti, ignoriši ovaj e-mail. Ako jesi:',
 		'Password Reset Request for %s'          => 'Zahtev za promenu lozinke za %s',
+
+		/* 1.1.8 — found by walking the shop, cart, checkout and account flows */
+		'Shipment'                               => 'Dostava',
+		'Shipment %d'                            => 'Dostava %d',
+		'Country / region'                       => 'Država',
+		'City:'                                  => 'Grad:',
+		'Postcode / ZIP:'                        => 'Poštanski broj:',
+		'Postcode'                               => 'Poštanski broj',
+		'District'                               => 'Okrug',
+		'Enter your coupon code'                 => 'Unesi kod kupona',
+		'Confirm your email address'             => 'Potvrdi e-mail adresu',
+		'Confirm email address'                  => 'Potvrdi e-mail adresu',
+		'Confirm your email address to check for past orders and link them to your account.' => 'Potvrdi e-mail adresu da proverimo ranije porudžbine i povežemo ih sa tvojim nalogom.',
+		'View order'                             => 'Pogledaj porudžbinu',
+		'View order %s'                          => 'Pogledaj porudžbinu %s',
+		'View order number %s'                   => 'Pogledaj porudžbinu broj %s',
+		'Account pages'                          => 'Stranice naloga',
+		'This will be how your name will be displayed in the account section' => 'Ovako će se tvoje ime prikazivati u nalogu',
+		'Show password'                          => 'Prikaži lozinku',
+		'Hide password'                          => 'Sakrij lozinku',
+		'Please enter a stronger password.'      => 'Unesi jaču lozinku.',
+		'Original price was: %s.'                => 'Stara cena: %s.',
+		'Current price is: %s.'                  => 'Nova cena: %s.',
+		'Sorted by popularity'                   => 'Sortirano po popularnosti',
+		'Sorted by average rating'               => 'Sortirano po oceni',
+		'Sorted by latest'                       => 'Sortirano od najnovijeg',
+		'Sorted by price: low to high'           => 'Sortirano po ceni: od niže ka višoj',
+		'Sorted by price: high to low'           => 'Sortirano po ceni: od više ka nižoj',
+		'Please select a rating'                 => 'Izaberi ocenu',
+		'1 of 5 stars'                           => '1 od 5 zvezdica',
+		'2 of 5 stars'                           => '2 od 5 zvezdica',
+		'3 of 5 stars'                           => '3 od 5 zvezdica',
+		'4 of 5 stars'                           => '4 od 5 zvezdica',
+		'5 of 5 stars'                           => '5 od 5 zvezdica',
+		'View full-screen image gallery'         => 'Prikaži galeriju preko celog ekrana',
+		'Loading failed'                         => 'Učitavanje nije uspelo',
+		'Please enter 1 or more characters'      => 'Unesi bar 1 znak',
+		'Please delete 1 character'              => 'Obriši 1 znak',
+		'Please delete %qty% characters'         => 'Obriši %qty% znakova',
+		'You can only select 1 item'             => 'Možeš da izabereš samo 1 stavku',
+		'One result is available, press enter to select it.' => 'Dostupan je jedan rezultat, pritisni Enter da ga izabereš.',
+		'%qty% results are available, use up and down arrow keys to navigate.' => 'Dostupno rezultata: %qty%. Koristi strelice gore i dole.',
+
+		/* 1.1.8 — customer e-mails (WooCommerce 10/11 wording) */
+		'Just to let you know &mdash; we’ve received your order, and it is now being processed.' => 'Porudžbina je stigla i već je obrađujemo.',
+		'Here’s a reminder of what you’ve ordered:' => 'Podsetnik šta si naručio/la:',
+		'Here’s a reminder of what you’ve bought:' => 'Podsetnik šta si kupio/la:',
+		'We’ve received your order and it’s currently on hold until we can confirm your payment has been processed.' => 'Porudžbina je stigla i čeka dok ne potvrdimo uplatu.',
+		'Thanks for your order. We’ve received it, and it’s currently on hold while we complete the next required step, such as confirming, clearing, or finalizing payment.' => 'Hvala na porudžbini. Stigla je i čeka sledeći korak, na primer potvrdu uplate.',
+		'The following note has been added to your order:' => 'Uz tvoju porudžbinu je dodata napomena:',
+		'As a reminder, here are your order details:' => 'Podsetnik — detalji porudžbine:',
+		'Your order details are as follows:'   => 'Detalji porudžbine:',
+		'Order summary'                          => 'Pregled porudžbine',
+		'Thanks again! If you need any help with your order, please contact us at {store_email}.' => 'Hvala još jednom! Ako ti treba pomoć oko porudžbine, piši nam na {store_email}.',
+		'Thanks again! If you need any help with your order, please contact us at %s.' => 'Hvala još jednom! Ako ti treba pomoć oko porudžbine, piši nam na %s.',
+		'If you need any help with your order, please contact us at {store_email}.' => 'Ako ti treba pomoć oko porudžbine, piši nam na {store_email}.',
+		'Thanks again for shopping with us. If you have any questions, reply to this email and we\'ll help out.' => 'Hvala još jednom na kupovini. Ako imaš pitanje, odgovori na ovaj e-mail i pomoći ćemo.',
+		'Thanks for shopping with us'            => 'Hvala na kupovini',
+		'We hope to see you again soon.'         => 'Nadamo se da se vidimo opet.',
+		'Sorry, your order was unsuccessful'     => 'Porudžbina nije uspela',
+		"Unfortunately, we couldn't complete your order due to an issue with your payment method." => 'Nažalost, porudžbinu nismo mogli da završimo zbog problema sa plaćanjem.',
+		'We’re getting in touch to let you know that your order #%1$s has been cancelled.' => 'Javljamo ti da je porudžbina #%1$s otkazana.',
+		'Your order from %s has been refunded.'  => 'Novac za porudžbinu sa sajta %s je vraćen.',
+		'Your order from %s has been partially refunded.' => 'Deo novca za porudžbinu sa sajta %s je vraćen.',
+		'Your order on %s has been refunded. There are more details below for your reference:' => 'Novac za porudžbinu sa sajta %s je vraćen. Detalji su ispod:',
+		'Your order from {site_title} is on hold' => 'Porudžbina sa sajta {site_title} čeka potvrdu',
+		'Your order from {site_title} is on its way!' => 'Porudžbina sa sajta {site_title} je krenula!',
+		'Reset your password'                    => 'Promeni lozinku',
+		'Reset your password for {site_title}'   => 'Promena lozinke za {site_title}',
+		'If you didn’t make this request, just ignore this email. If you’d like to proceed, reset your password via the link below:' => 'Ako nisi ti, ignoriši ovaj e-mail. Ako jesi, promeni lozinku preko linka ispod:',
+		'Click here to set your new password.'   => 'Klikni ovde da postaviš novu lozinku.',
+		'Set your new password.'                 => 'Postavi novu lozinku.',
+		'Thanks for creating an account on %s. Here’s a copy of your user details.' => 'Hvala što si napravio/la nalog na sajtu %s. Evo tvojih podataka.',
+		'You can access your account area to view orders, change your password, and more via the link below:' => 'U svom nalogu možeš da vidiš porudžbine, promeniš lozinku i još toga — link je ispod:',
+		'Username: <b>%s</b>'                    => 'Korisničko ime: <b>%s</b>',
+		'Username: %s'                           => 'Korisničko ime: %s',
+		'[{site_title}]: Your order #{order_number} has been cancelled' => '[{site_title}]: porudžbina #{order_number} je otkazana',
+		'Order cancelled: #{order_number}'       => 'Porudžbina #{order_number} je otkazana',
+		'Your order at {site_title} was unsuccessful' => 'Porudžbina na sajtu {site_title} nije uspela',
+		'Order failed: #{order_number}'          => 'Porudžbina #{order_number} nije uspela',
+		"If you'd like to continue with your purchase, please return to %s and try a different method of payment." => 'Ako želiš da nastaviš kupovinu, vrati se na %s i izaberi drugi način plaćanja.',
 	);
 	return apply_filters( 'webni_wc_strings', $table );
 }
+
+/**
+ * WordPress core strings that customers see on the storefront (log-in and password errors,
+ * the password strength meter used by WooCommerce). Keys may carry a context as
+ * "context\004text", like in .mo files.
+ *
+ * @return array
+ */
+function webni_wp_strings() {
+	static $table = null;
+	if ( null !== $table ) {
+		return $table;
+	}
+	$table = array(
+		'Lost your password?'                    => 'Zaboravio/la si lozinku?',
+		'<strong>Error:</strong> The password you entered for the username %s is incorrect.' => '<strong>Greška:</strong> lozinka za korisničko ime %s nije tačna.',
+		'<strong>Error:</strong> The password you entered for the email address %s is incorrect.' => '<strong>Greška:</strong> lozinka za e-mail adresu %s nije tačna.',
+		'<strong>Error:</strong> The username <strong>%s</strong> is not registered on this site. If you are unsure of your username, try your email address instead.' => '<strong>Greška:</strong> korisničko ime <strong>%s</strong> ne postoji. Ako nisi siguran/na, probaj sa e-mail adresom.',
+		'<strong>Error:</strong> Unknown email address. Check again or try your username.' => '<strong>Greška:</strong> nepoznata e-mail adresa. Proveri je ili probaj sa korisničkim imenom.',
+		'<strong>Error:</strong> Invalid username, email address or incorrect password.' => '<strong>Greška:</strong> pogrešno korisničko ime, e-mail adresa ili lozinka.',
+		'<strong>Error:</strong> The password field is empty.' => '<strong>Greška:</strong> unesi lozinku.',
+		'<strong>Error:</strong> The username field is empty.' => '<strong>Greška:</strong> unesi korisničko ime.',
+		'<strong>Error:</strong> The email field is empty.' => '<strong>Greška:</strong> unesi e-mail adresu.',
+		'<strong>Error:</strong> Please enter a username or email address.' => '<strong>Greška:</strong> unesi korisničko ime ili e-mail adresu.',
+		'<strong>Error:</strong> There is no account with that username or email address.' => '<strong>Greška:</strong> ne postoji nalog sa tim korisničkim imenom ili e-mail adresom.',
+		'<strong>Error:</strong> The email address is not correct.' => '<strong>Greška:</strong> e-mail adresa nije ispravna.',
+		'<strong>Error:</strong> Please type your email address.' => '<strong>Greška:</strong> unesi e-mail adresu.',
+		'<strong>Error:</strong> The email could not be sent. Your site may not be correctly configured to send emails. <a href="%s">Get support for resetting your password</a>.' => '<strong>Greška:</strong> e-mail nije poslat. Javi nam se i pomoći ćemo ti da promeniš lozinku.',
+		'Hint: The password should be at least twelve characters long. To make it stronger, use upper and lower case letters, numbers, and symbols like ! " ? $ % ^ &amp; ).' => 'Savet: lozinka treba da ima bar 12 znakova. Jača je ako sadrži velika i mala slova, brojeve i znakove kao ! " ? $ % ^ &amp; ).',
+		"password strength\004Password strength unknown" => 'Jačina lozinke nepoznata',
+		"password strength\004Very weak"        => 'Veoma slaba',
+		"password strength\004Weak"             => 'Slaba',
+		"password strength\004Medium"           => 'Srednja',
+		"password strength\004Strong"           => 'Jaka',
+		"password mismatch\004Mismatch"         => 'Ne poklapa se',
+		'Page not found'                         => 'Stranica nije pronađena',
+	);
+	return apply_filters( 'webni_wp_strings', $table );
+}
+
+/**
+ * gettext filter for the WordPress core ("default") domain on the storefront.
+ *
+ * @param string $translation Translated text.
+ * @param string $text        Original text.
+ * @param string $domain      Text domain.
+ * @param string $context     Context ('' for none).
+ * @return string
+ */
+function webni_wp_gettext( $translation, $text, $domain, $context = '' ) {
+	if ( 'default' !== $domain || ! webni_wc_translate_enabled() ) {
+		return $translation;
+	}
+	$table = webni_wp_strings();
+	$key   = '' !== $context ? $context . "\004" . $text : $text;
+	if ( isset( $table[ $key ] ) ) {
+		return $table[ $key ];
+	}
+	return isset( $table[ $text ] ) ? $table[ $text ] : $translation;
+}
+add_filter( 'gettext', function ( $translation, $text, $domain ) {
+	return webni_wp_gettext( $translation, $text, $domain );
+}, 11, 3 );
+add_filter( 'gettext_with_context', function ( $translation, $text, $context, $domain ) {
+	return webni_wp_gettext( $translation, $text, $domain, $context );
+}, 11, 4 );
+
+/**
+ * Serbian addresses need no district: hide the state field (its options are English district
+ * names) in checkout, account addresses and the cart's shipping calculator.
+ *
+ * @param array $locale Country locale.
+ * @return array
+ */
+function webni_wc_country_locale( $locale ) {
+	$locale['RS']['state'] = array( 'required' => false, 'hidden' => true );
+	return $locale;
+}
+add_filter( 'woocommerce_get_country_locale', 'webni_wc_country_locale' );
+add_filter( 'woocommerce_shipping_calculator_enable_state', '__return_false' );
 
 /**
  * gettext filter: translate "woocommerce" strings on the storefront.
