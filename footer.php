@@ -1,7 +1,7 @@
 <?php
 /**
  * Site footer: brand, menus, contact, social, newsletter, legal, copyright.
- * Also carries the global components (cursor, toast, quiz modal).
+ * Also carries the global components (toast, quiz modal).
  *
  * @package webni-custom-version-1
  */
@@ -111,7 +111,6 @@ $webni_gf_nl  = (int) webni_option( 'newsletter_gf_id', 0 );
 	</div>
 </footer>
 
-<div class="cursor" aria-hidden="true"><div class="cursor__dot"></div><div class="cursor__ring"></div></div>
 <div class="toast" role="status" aria-live="polite"></div>
 
 <div class="quiz" id="quizModal" hidden role="dialog" aria-modal="true" aria-label="<?php echo esc_attr( webni_option( 'hero_cta1' ) ); ?>">

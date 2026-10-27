@@ -213,31 +213,71 @@ function webni_store_defaults( $force = false ) {
 }
 
 /**
- * One shipping zone (Srbija) with a flat rate and free shipping above a threshold —
- * only when the store has no shipping zones yet.
+ * Delivery in Serbia: courier 390 RSD, free from 9.000 RSD.
+ *
+ * Makes sure a shipping zone covers Serbia and has both methods. Earlier versions only created the
+ * zone when the store had no zones at all, so a store that already had one (e.g. from the
+ * WooCommerce setup wizard) ended up without any rate and orders were placed without delivery.
+ * Existing methods are never changed: a zone that already has an enabled paid method (flat rate or
+ * a courier plugin's method) keeps it, and an enabled free-shipping method is kept as it is.
+ *
+ * @return array{zone: string, added: string[]} What was done.
  */
 function webni_default_shipping() {
+	$done = array( 'zone' => '', 'added' => array() );
 	if ( ! class_exists( 'WC_Shipping_Zones' ) ) {
-		return;
+		return $done;
 	}
-	$zones = WC_Shipping_Zones::get_zones();
-	if ( ! empty( $zones ) ) {
-		return;
-	}
-	$zone = new WC_Shipping_Zone();
-	$zone->set_zone_name( 'Srbija' );
-	$zone->set_zone_order( 1 );
-	$zone->add_location( 'RS', 'country' );
-	$zone->save();
 
-	$flat_id = $zone->add_shipping_method( 'flat_rate' );
-	if ( $flat_id ) {
-		update_option( 'woocommerce_flat_rate_' . $flat_id . '_settings', array( 'title' => 'Kurirska dostava', 'tax_status' => 'none', 'cost' => '390' ) );
+	$zone = null;
+	foreach ( WC_Shipping_Zones::get_zones() as $data ) {
+		$candidate = new WC_Shipping_Zone( $data['id'] );
+		foreach ( $candidate->get_zone_locations() as $loc ) {
+			if ( 'country' === $loc->type && 'RS' === $loc->code ) {
+				$zone = $candidate;
+				break 2;
+			}
+		}
 	}
-	$free_id = $zone->add_shipping_method( 'free_shipping' );
-	if ( $free_id ) {
-		update_option( 'woocommerce_free_shipping_' . $free_id . '_settings', array( 'title' => 'Besplatna dostava', 'requires' => 'min_amount', 'min_amount' => '9000', 'ignore_discounts' => 'no' ) );
+	if ( ! $zone ) {
+		$zone = new WC_Shipping_Zone();
+		$zone->set_zone_name( 'Srbija' );
+		$zone->set_zone_order( 0 ); // Before any broader zone, so Serbian addresses always match it.
+		$zone->add_location( 'RS', 'country' );
+		$zone->save();
+		$done['zone'] = 'created';
+	} else {
+		$done['zone'] = 'existing: ' . $zone->get_zone_name();
 	}
+
+	$has_paid = false;
+	$has_free = false;
+	foreach ( $zone->get_shipping_methods( true ) as $method ) {
+		if ( 'free_shipping' === $method->id ) {
+			$has_free = true;
+		} elseif ( 'local_pickup' !== $method->id && 'pickup_location' !== $method->id ) {
+			$has_paid = true;
+		}
+	}
+
+	if ( ! $has_paid ) {
+		$flat_id = $zone->add_shipping_method( 'flat_rate' );
+		if ( $flat_id ) {
+			update_option( 'woocommerce_flat_rate_' . $flat_id . '_settings', array( 'title' => 'Kurirska dostava', 'tax_status' => 'none', 'cost' => '390' ) );
+			$done['added'][] = 'Kurirska dostava 390 RSD';
+		}
+	}
+	if ( ! $has_free ) {
+		$free_id = $zone->add_shipping_method( 'free_shipping' );
+		if ( $free_id ) {
+			update_option( 'woocommerce_free_shipping_' . $free_id . '_settings', array( 'title' => 'Besplatna dostava', 'requires' => 'min_amount', 'min_amount' => '9000', 'ignore_discounts' => 'no' ) );
+			$done['added'][] = 'Besplatna dostava od 9.000 RSD';
+		}
+	}
+	if ( class_exists( 'WC_Cache_Helper' ) ) {
+		WC_Cache_Helper::get_transient_version( 'shipping', true );
+	}
+	return $done;
 }
 
 /**
@@ -320,6 +360,11 @@ function webni_maybe_upgrade() {
 	if ( ! get_option( 'webni_widgets_cleaned' ) ) {
 		webni_clear_stock_widgets();
 		update_option( 'webni_widgets_cleaned', 1 );
+	}
+	if ( ! get_option( 'webni_shipping_checked' ) && class_exists( 'WooCommerce' ) ) {
+		// 1.1.7: stores that already had a shipping zone never got the Serbian rates.
+		webni_default_shipping();
+		update_option( 'webni_shipping_checked', 1 );
 	}
 	if ( ! get_option( 'webni_merchant_linked' ) && function_exists( 'webni_link_merchant_pages' ) ) {
 		// 1.1.6: the [placeholders] in Kontakt and the legal drafts now read the Customizer data.

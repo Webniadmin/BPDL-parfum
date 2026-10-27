@@ -1,5 +1,5 @@
 /* Webni Custom Version 1 Theme — global behaviour.
-   Navigation, search overlay, mini cart drawer, custom cursor, reveals, toast,
+   Navigation, search overlay, mini cart drawer, magnetic buttons, reveals, toast,
    collection filters, zodiac picker, quiz + gift flows, WooCommerce add-to-cart feedback.
    Data arrives through the localized `BPDL` object (inc/enqueue.php). */
 (function () {
@@ -100,20 +100,8 @@
     if (document.body.classList.contains('menu-open')) { document.body.classList.remove('menu-open'); document.body.style.overflow = ''; }
   });
 
-  /* ---------- cursor, magnetic buttons ---------- */
+  /* ---------- magnetic buttons (the system cursor is used as is) ---------- */
   if (fine && !reduce) {
-    var c = $('.cursor');
-    if (c) {
-      document.body.classList.add('has-cursor');
-      var dot = $('.cursor__dot', c), ring = $('.cursor__ring', c);
-      var tx = window.innerWidth / 2, ty = window.innerHeight / 2, x = tx, y = ty;
-      window.addEventListener('pointermove', function (e) { tx = e.clientX; ty = e.clientY; dot.style.transform = 'translate(' + tx + 'px,' + ty + 'px)'; c.style.opacity = 1; });
-      document.addEventListener('mouseleave', function () { c.style.opacity = 0; });
-      window.addEventListener('pointerdown', function () { c.classList.add('is-down'); });
-      window.addEventListener('pointerup', function () { c.classList.remove('is-down'); });
-      document.addEventListener('pointerover', function (e) { c.classList.toggle('is-hover', !!e.target.closest('a,button,label,input,select,textarea')); });
-      (function loop() { x += (tx - x) * 0.18; y += (ty - y) * 0.18; ring.style.transform = 'translate(' + x + 'px,' + y + 'px)'; requestAnimationFrame(loop); })();
-    }
     $$('.btn').forEach(function (b) {
       b.addEventListener('pointermove', function (e) { var r = b.getBoundingClientRect(); var dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2); b.style.transform = 'translate(' + (dx * 0.22) + 'px,' + (dy * 0.22) + 'px)'; });
       b.addEventListener('pointerleave', function () { b.style.transform = ''; });

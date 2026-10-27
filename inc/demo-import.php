@@ -59,6 +59,10 @@ function webni_tools_handle() {
 			update_option( 'webni_flush_rewrite', 1 );
 			$message = sprintf( 'Pages checked: %d created. Menus assigned where empty.', $n );
 			break;
+		case 'shipping':
+			$r       = webni_default_shipping();
+			$message = sprintf( 'Shipping zone for Serbia: %s; added: %s.', $r['zone'], $r['added'] ? implode( ', ', $r['added'] ) : 'nothing (rates were already there)' );
+			break;
 		case 'gf_forms':
 			$r       = webni_gf_create_forms();
 			$message = $r['error'] && ! $r['created'] ? 'Forms not created: ' . $r['error'] : sprintf( 'Gravity Forms: created %s; already set %s.', $r['created'] ? implode( ', ', $r['created'] ) : 'none', $r['kept'] ? implode( ', ', $r['kept'] ) : 'none' );
@@ -98,6 +102,10 @@ function webni_tools_page() {
 		array( 'Newsletter form ID', (int) webni_option( 'newsletter_gf_id', 0 ) ?: 'not set', (bool) webni_option( 'newsletter_gf_id', 0 ) ),
 		array( 'Quiz e-mail form ID', (int) webni_option( 'quiz_gf_id', 0 ) ?: 'not set (optional)', true ),
 		array( 'Contact form ID', (int) webni_option( 'contact_gf_id', 0 ) ?: 'not set', (bool) webni_option( 'contact_gf_id', 0 ) ),
+		array( 'Delivery in Serbia', ( function () {
+			$f = webni_shipping_figures();
+			return ( null === $f['cost'] ? 'no paid rate' : $f['cost'] . ' RSD' ) . ' · ' . ( null === $f['free'] ? 'no free shipping' : 'free from ' . $f['free'] . ' RSD' );
+		} )(), null !== webni_shipping_figures()['cost'] ),
 		array( 'Merchant data (naziv, adresa, PIB, MB)', webni_merchant_line() ? webni_merchant_line() : 'not filled in — legal pages show [placeholders]', '' !== webni_merchant( 'naziv' ) && '' !== webni_merchant( 'pib' ) && '' !== webni_merchant( 'mb' ) ),
 		array( 'Card / 3-D Secure logos', absint( webni_option( 'payment_logos', 0 ) ) ? 'set' : 'not set (required by the bank for card payments)', (bool) absint( webni_option( 'payment_logos', 0 ) ) ),
 		array( 'Perfume products with character data', $perfume_count, $perfume_count >= 8 ),
@@ -147,6 +155,11 @@ function webni_tools_page() {
 				<h3 style="margin-top:0">Pages &amp; menus</h3>
 				<p>Creates any missing page (Početna, Parfemi, Korpa, Plaćanje, Moj nalog, Pomoć, O nama, Kontakt, legal drafts) and assigns menus to empty locations.</p>
 				<button class="button" name="webni_tool" value="create_pages">Check pages &amp; menus</button>
+			</div>
+			<div class="card" style="max-width:none;padding:16px 20px">
+				<h3 style="margin-top:0">Dostava za Srbiju</h3>
+				<p>Makes sure a shipping zone covers Serbia with "Kurirska dostava" 390 RSD and "Besplatna dostava" from 9.000 RSD. Only missing methods are added; existing rates (or a courier plugin's method) are kept. Prices can be changed later in WooCommerce → Settings → Shipping.</p>
+				<button class="button" name="webni_tool" value="shipping">Podesi dostavu</button>
 			</div>
 			<div class="card" style="max-width:none;padding:16px 20px">
 				<h3 style="margin-top:0">Napravi forme (Gravity Forms)</h3>

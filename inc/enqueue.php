@@ -32,7 +32,7 @@ function webni_enqueue_assets() {
 		wp_enqueue_style( 'webni-woocommerce', WEBNI_THEME_URI . '/assets/css/woocommerce.css', array( 'webni-theme' ), $v );
 	}
 
-	// Global behaviour: navigation, cursor, reveals, toast, quiz modal, filters, zodiac picker.
+	// Global behaviour: navigation, magnetic buttons, reveals, toast, quiz modal, filters, zodiac picker.
 	wp_enqueue_script( 'webni-theme', WEBNI_THEME_URI . '/assets/js/theme.js', array(), $v, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 	wp_localize_script( 'webni-theme', 'BPDL', webni_js_data() );
 
