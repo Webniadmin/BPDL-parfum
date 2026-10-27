@@ -168,7 +168,12 @@ body.webni .gform_confirmation_message {
 /* Kontakt page: comfortable width; name + e-mail side by side on wide screens */
 body.webni .entry-content .gform_wrapper.gform-theme { max-width: 680px; margin: 8px 0 40px; }
 
-/* Newsletter: e-mail and button on one line */
+/* Newsletter: e-mail and button on one line (full width of its column; auto margins would
+   shrink it to its content inside the footer grid) */
+body.webni .news-form,
+body.webni .news-form .gform_wrapper.gform-theme { width: 100%; }
+body.webni .footer__news .news-form,
+body.webni .footer__news .news-form .gform_wrapper.gform-theme { margin: 0; max-width: 560px; justify-self: end; }
 body.webni .news-form .gform_wrapper.gform-theme form { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 10px; }
 body.webni .news-form .gform_wrapper.gform-theme .gform-body { flex: 1 1 300px; min-width: 0; }
 body.webni .news-form .gform_wrapper.gform-theme .gform_footer { margin: 0; flex: 0 0 auto; }

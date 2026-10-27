@@ -122,6 +122,8 @@ Theme strings use the `webni-custom-version-1` domain (`languages/webni-custom-v
 
 ## Changelog
 
+**1.2.2** — Newsletter form in the footer uses its full column (e-mail and button on one line).
+
 **1.2.1** — Gravity Forms styled in the BP|DL look: new `assets/css/forms.css` (loaded when Gravity Forms is active) restyles the Orbital theme — dark fields with a gold focus ring, small uppercase labels, gold required mark, the theme's pill button (via Orbital's `--gf-local-*` variables), quiet error states, newsletter on one line, full-width button on phones; `gform_default_styles` sets Orbital's own colours; visitor-facing Gravity Forms texts are Serbian ("(obavezno)", validation messages, buttons).
 
 **1.2.0** — Raiffeisen e-commerce branding built in: the bank's co-brand artwork (assets/images/payments, unchanged paths; the bank logo and the card-brand row are separate views of the same file) shows in the footer of every page and above *Poruči* at checkout as three groups — bank logo linked to raiffeisenbank.rs, Visa/Mastercard/DinaCard (60 px high, ≥ 37 px per brand), and the 3-D Secure programmes linked to the Visa Secure and Mastercard Identity Check pages the bank prescribes (Customizer logo uploads, text links until then). *Podaci o trgovcu* gets the activity code/name and the shop's internet address (bank checklist), also in the footer line.
