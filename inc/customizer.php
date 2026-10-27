@@ -114,7 +114,7 @@ function webni_option_defaults() {
 		'shop_title'         => 'Parfemi',
 		'shop_intro'         => 'Osam recepata, osam karaktera. Jedan je tvoj.',
 		'shop_delivery_line' => 'dostava za 1–3 radna dana · pouzeće ili kartica',
-		'free_shipping_text' => 'besplatna dostava iznad 9.000 RSD',
+		'free_shipping_text' => 'besplatna dostava od {prag} RSD', // {prag} = threshold from the WooCommerce shipping zone
 		'product_how_long'   => 'Tri spreja ujutru: vrat, zglob, odeća. Ništa do večeri.',
 		'product_notes_lead' => 'Recept je napisao AI: iz svega što se najčešće nosi u ovoj kategoriji, svedeno na jednu formulu. Vrh traje minute, srce sate, baza do večeri.',
 		// Footer / contact.
@@ -296,7 +296,7 @@ function webni_customize_register( $wp_customize ) {
 		array( 'shop_title', 'shop', 'Naslov stranice Parfemi', 'text' ),
 		array( 'shop_intro', 'shop', 'Uvod na stranici Parfemi', 'text' ),
 		array( 'shop_delivery_line', 'shop', 'Linija o dostavi ispod dugmeta za kupovinu', 'text' ),
-		array( 'free_shipping_text', 'shop', 'Tekst o besplatnoj dostavi', 'text' ),
+		array( 'free_shipping_text', 'shop', 'Tekst o besplatnoj dostavi ({prag} = iznos iz WooCommerce dostave)', 'text' ),
 		array( 'product_how_long', 'shop', 'Kako traje (stranica proizvoda)', 'text' ),
 		array( 'product_notes_lead', 'shop', 'Uvod uz note (stranica proizvoda)', 'textarea' ),
 

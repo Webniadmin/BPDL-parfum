@@ -49,7 +49,7 @@ $notes    = $d['notes'];
 				<?php woocommerce_template_single_add_to_cart(); ?>
 				<a class="btn btn--ghost btn--lg" href="<?php echo esc_url( webni_discovery_url() ); ?>"><?php esc_html_e( 'Probaj u discovery setu', 'webni-custom-version-1' ); ?></a>
 			</div>
-			<p class="tiny"><?php echo esc_html( $d['cat_label'] . ' · ' . webni_option( 'shop_delivery_line' ) . ' · ' . webni_option( 'free_shipping_text' ) ); ?></p>
+			<p class="tiny"><?php echo esc_html( $d['cat_label'] . ' · ' . webni_option( 'shop_delivery_line' ) . ' · ' . webni_free_shipping_text() ); ?></p>
 			<?php do_action( 'woocommerce_single_product_summary' ); ?>
 		</div>
 		<div class="hero__stage">

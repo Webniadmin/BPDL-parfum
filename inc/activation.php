@@ -213,7 +213,17 @@ function webni_store_defaults( $force = false ) {
 }
 
 /**
- * Delivery in Serbia: courier 390 RSD, free from 9.000 RSD.
+ * Order subtotal (RSD) from which delivery is free. Only used when the theme sets up or repairs
+ * the shipping zone; the live value is whatever WooCommerce → Settings → Shipping says.
+ *
+ * @return int
+ */
+function webni_free_shipping_min() {
+	return (int) apply_filters( 'webni_free_shipping_min', 6000 );
+}
+
+/**
+ * Delivery in Serbia: courier 390 RSD, free from webni_free_shipping_min() (6.000 RSD).
  *
  * Makes sure a shipping zone covers Serbia and has both methods. Earlier versions only created the
  * zone when the store had no zones at all, so a store that already had one (e.g. from the
@@ -261,9 +271,14 @@ function webni_default_shipping() {
 			// and hides the courier rate: give it the shop's threshold.
 			if ( empty( $settings['requires'] ) ) {
 				$settings['requires']   = 'min_amount';
-				$settings['min_amount'] = '9000';
+				$settings['min_amount'] = (string) webni_free_shipping_min();
 				$changed                = true;
-				$done['added'][]        = 'free shipping now from 9.000 RSD';
+				$done['added'][]        = 'free shipping now from ' . webni_free_shipping_min() . ' RSD';
+			} elseif ( 'min_amount' === $settings['requires'] && isset( $settings['min_amount'] ) && '9000' === (string) $settings['min_amount'] && 9000 !== webni_free_shipping_min() ) {
+				// 9.000 was the theme's own earlier default; the shop now gives free delivery from 6.000.
+				$settings['min_amount'] = (string) webni_free_shipping_min();
+				$changed                = true;
+				$done['added'][]        = 'free shipping threshold 9.000 → ' . webni_free_shipping_min() . ' RSD';
 			}
 			if ( empty( $settings['title'] ) || 'Free shipping' === $settings['title'] ) {
 				$settings['title'] = 'Besplatna dostava';
@@ -291,8 +306,8 @@ function webni_default_shipping() {
 	if ( ! $has_free ) {
 		$free_id = $zone->add_shipping_method( 'free_shipping' );
 		if ( $free_id ) {
-			update_option( 'woocommerce_free_shipping_' . $free_id . '_settings', array( 'title' => 'Besplatna dostava', 'requires' => 'min_amount', 'min_amount' => '9000', 'ignore_discounts' => 'no' ) );
-			$done['added'][] = 'Besplatna dostava od 9.000 RSD';
+			update_option( 'woocommerce_free_shipping_' . $free_id . '_settings', array( 'title' => 'Besplatna dostava', 'requires' => 'min_amount', 'min_amount' => (string) webni_free_shipping_min(), 'ignore_discounts' => 'no' ) );
+			$done['added'][] = 'Besplatna dostava od ' . webni_free_shipping_min() . ' RSD';
 		}
 	}
 	if ( class_exists( 'WC_Cache_Helper' ) ) {
@@ -382,16 +397,21 @@ function webni_maybe_upgrade() {
 		webni_clear_stock_widgets();
 		update_option( 'webni_widgets_cleaned', 1 );
 	}
-	if ( (int) get_option( 'webni_shipping_checked' ) < 2 && class_exists( 'WooCommerce' ) ) {
+	if ( (int) get_option( 'webni_shipping_checked' ) < 3 && class_exists( 'WooCommerce' ) ) {
 		// 1.1.7: stores that already had a shipping zone never got the Serbian rates;
-		// 1.1.8: an unconditional "Free shipping" from the setup wizard made every order free.
+		// 1.1.8: an unconditional "Free shipping" from the setup wizard made every order free;
+		// 1.1.9: free delivery from 6.000 RSD instead of 9.000.
 		webni_default_shipping();
-		update_option( 'webni_shipping_checked', 2 );
+		update_option( 'webni_shipping_checked', 3 );
 	}
-	if ( ! get_option( 'webni_merchant_linked' ) && function_exists( 'webni_link_merchant_pages' ) ) {
-		// 1.1.6: the [placeholders] in Kontakt and the legal drafts now read the Customizer data.
+	if ( 'besplatna dostava iznad 9.000 RSD' === get_theme_mod( 'webni_free_shipping_text' ) ) {
+		remove_theme_mod( 'webni_free_shipping_text' ); // Back to the default, which reads the zone.
+	}
+	if ( (int) get_option( 'webni_merchant_linked' ) < 2 && function_exists( 'webni_link_merchant_pages' ) ) {
+		// 1.1.6: the [placeholders] in Kontakt and the legal drafts now read the Customizer data;
+		// 1.1.9: the delivery sentence on Pomoć reads the shipping zone too.
 		webni_link_merchant_pages();
-		update_option( 'webni_merchant_linked', 1 );
+		update_option( 'webni_merchant_linked', 2 );
 	}
 }
 add_action( 'init', 'webni_maybe_upgrade', 98 );

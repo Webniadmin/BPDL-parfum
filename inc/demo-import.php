@@ -143,7 +143,7 @@ function webni_tools_page() {
 			</div>
 			<div class="card" style="max-width:none;padding:16px 20px">
 				<h3 style="margin-top:0">Store defaults</h3>
-				<p>RSD with "5.900 RSD" format, Serbia as the only country, cash on delivery, Serbian e-mail subjects, one shipping zone (390 RSD, free above 9.000 RSD), reviews off, guest checkout on. Overwrites those options.</p>
+				<p>RSD with "5.900 RSD" format, Serbia as the only country, cash on delivery, Serbian e-mail subjects, one shipping zone (390 RSD, free from 6.000 RSD), reviews off, guest checkout on. Overwrites those options.</p>
 				<button class="button" name="webni_tool" value="store_defaults">Apply store defaults</button>
 			</div>
 			<div class="card" style="max-width:none;padding:16px 20px">
@@ -158,7 +158,7 @@ function webni_tools_page() {
 			</div>
 			<div class="card" style="max-width:none;padding:16px 20px">
 				<h3 style="margin-top:0">Dostava za Srbiju</h3>
-				<p>Makes sure a shipping zone covers Serbia with "Kurirska dostava" 390 RSD and "Besplatna dostava" from 9.000 RSD. Only missing methods are added; existing rates (or a courier plugin's method) are kept. Prices can be changed later in WooCommerce → Settings → Shipping.</p>
+				<p>Makes sure a shipping zone covers Serbia with "Kurirska dostava" 390 RSD and "Besplatna dostava" from 6.000 RSD. Only missing methods are added; existing rates (or a courier plugin's method) are kept; an unconditional free shipping or the theme's earlier 9.000 RSD threshold becomes 6.000 RSD. Prices can be changed later in WooCommerce → Settings → Shipping.</p>
 				<button class="button" name="webni_tool" value="shipping">Podesi dostavu</button>
 			</div>
 			<div class="card" style="max-width:none;padding:16px 20px">

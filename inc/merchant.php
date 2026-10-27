@@ -148,7 +148,7 @@ function webni_shipping_figures() {
 }
 
 /**
- * Amount in the shop format without currency ("9.000").
+ * Amount in the shop format without currency ("6.000").
  *
  * @param float|null $amount Amount.
  * @return string
@@ -222,7 +222,12 @@ add_shortcode( 'webni_trgovac', 'webni_merchant_shortcode' );
  * @return string
  */
 function webni_link_merchant_placeholders( $content ) {
-	$map = array();
+	$map = array(
+		// Delivery sentences of the drafts: amounts follow the WooCommerce shipping zone.
+		'Dostava je 390 RSD, a za porudžbine iznad 9.000 RSD je besplatna.' => 'Dostava je [webni_trgovac polje="dostava"] RSD, a za porudžbine od [webni_trgovac polje="prag"] RSD je besplatna.',
+		'za porudžbine iznad [prag] RSD dostava je besplatna' => 'za porudžbine od [webni_trgovac polje="prag"] RSD dostava je besplatna',
+		'za porudžbine iznad [webni_trgovac polje="prag"] RSD dostava je besplatna' => 'za porudžbine od [webni_trgovac polje="prag"] RSD dostava je besplatna',
+	);
 	foreach ( webni_merchant_placeholders() as $placeholder => $field ) {
 		$map[ $placeholder ] = '[webni_trgovac polje="' . $field . '"]';
 	}
@@ -330,3 +335,21 @@ function webni_checkout_payment_logos() {
 	echo webni_payment_logos( 'checkout' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from wp_get_attachment_image().
 }
 add_action( 'woocommerce_review_order_after_payment', 'webni_checkout_payment_logos' );
+
+/**
+ * Free-delivery line under the buy button: the Customizer text with {prag} replaced by the
+ * threshold from the shipping zone; empty when the shop has no free delivery.
+ *
+ * @return string Plain text.
+ */
+function webni_free_shipping_text() {
+	$text  = (string) webni_option( 'free_shipping_text' );
+	$prag  = webni_merchant_free_threshold();
+	if ( false !== strpos( $text, '{prag}' ) ) {
+		if ( '' === $prag ) {
+			return '';
+		}
+		$text = str_replace( '{prag}', $prag, $text );
+	}
+	return $text;
+}

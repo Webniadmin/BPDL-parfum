@@ -39,7 +39,7 @@ $gallery = $product->get_gallery_image_ids();
 		</div>
 		<div class="summary entry-summary product-simple__summary">
 			<?php do_action( 'woocommerce_single_product_summary' ); ?>
-			<p class="tiny"><?php echo esc_html( webni_option( 'shop_delivery_line' ) . ' · ' . webni_option( 'free_shipping_text' ) ); ?></p>
+			<p class="tiny"><?php echo esc_html( webni_option( 'shop_delivery_line' ) . ' · ' . webni_free_shipping_text() ); ?></p>
 		</div>
 	</div>
 
