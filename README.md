@@ -122,6 +122,8 @@ Theme strings use the `webni-custom-version-1` domain (`languages/webni-custom-v
 
 ## Changelog
 
+**1.1.5** — Home hero (animated mode): the character cycle now shows every perfume's picture. The first picture's `srcset` made the browser ignore every other swap, so the slideshow kept falling back to the first perfume; swaps can no longer flip the two layers twice, all pictures are preloaded, framed/cutout styling follows each perfume, and the hover pause no longer fights taps on touch screens.
+
 **1.1.4** — The *Ko ga nosi* section of a perfume page shows the first picture of the WooCommerce product gallery instead of repeating the featured image (demo pictures are skipped; the featured image stays as the fallback).
 
 **1.1.3** — WordPress' sample widgets (Archives, Categories…) are moved out of the *Futer — dodatno* area on activation/update. Pretty-URL check is less strict: any rewrite to `index.php` in `.htaccess` counts (no WordPress markers required) and, when the file has none, the theme asks the server itself with one HEAD request to `/wp-json/` before switching to plain URLs; the admin notice names the expected file path.
